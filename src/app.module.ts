@@ -17,6 +17,7 @@ import { MongooseConfigService } from './database/mongoose-config.service';
 import { CronModule } from './cron/cron.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { KafkaModule } from './kafka/kafka.module';
+import { OliveyoungModule } from './oliveyoung/oliveyoung.module';
 
 const infrastructureDatabaseModule = MongooseModule.forRootAsync({
   useClass: MongooseConfigService,
@@ -29,38 +30,19 @@ const infrastructureDatabaseModule = MongooseModule.forRootAsync({
       load: [databaseConfig, authConfig, appConfig],
       envFilePath: ['.env'],
     }),
+    MongooseModule.forRoot(
+      process.env.DATABASE_URL ||
+        'mongodb://admin:password@localhost:27017/api?authSource=admin',
+    ),
     ScheduleModule.forRoot(),
     infrastructureDatabaseModule,
-    // I18nModule.forRootAsync({
-    //   useFactory: (configService: ConfigService<AllConfigType>) => ({
-    //     fallbackLanguage: configService.getOrThrow('app.fallbackLanguage', {
-    //       infer: true,
-    //     }),
-    //     loaderOptions: { path: path.join(__dirname, '/i18n/'), watch: true },
-    //   }),
-    //   resolvers: [
-    //     {
-    //       use: HeaderResolver,
-    //       useFactory: (configService: ConfigService<AllConfigType>) => {
-    //         return [
-    //           configService.get('app.headerLanguage', {
-    //             infer: true,
-    //           }),
-    //         ];
-    //       },
-    //       inject: [ConfigService],
-    //     },
-    //   ],
-    //   imports: [ConfigModule],
-    //   inject: [ConfigService],
-    // }),
     UsersModule,
-    // FilesModule,
     AuthModule,
     SessionModule,
     HomeModule,
     CronModule,
     KafkaModule,
+    OliveyoungModule,
   ],
 })
 export class AppModule {}

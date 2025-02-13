@@ -11,7 +11,7 @@ export class KafkaConsumerService {
 
   async listen(handler: BaseKafkaHandler) {
     const processCount = handler.getCount();
-    console.log('processCount');
+    console.log('processCount: ', processCount);
     if (!processCount) {
       return;
     }

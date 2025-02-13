@@ -78,5 +78,8 @@ export default registerAs<AppConfig>('app', () => {
       brokers: process.env.KAFKA_BROKERS || 'localhost:29092',
       client: process.env.KAFKA_CLIENT || 'musinsa-client',
     },
+    oliveYoung: {
+      numberOfPlpResult: process.env.OLIVE_YOUNG_PLP_RESULT_NUMBER || 0,
+    },
   };
 });
