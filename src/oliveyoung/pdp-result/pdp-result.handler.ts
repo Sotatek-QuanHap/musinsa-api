@@ -4,12 +4,12 @@ import { BaseKafkaHandler } from '../../utils/base.handler';
 import { SandyLogger } from '../../utils/sandy.logger';
 import { ConfigService } from '@nestjs/config';
 import { DatabaseService } from '../../database/database.service';
-import { CategoryResultConfigs, KafkaTopics } from '../constants';
+import { KafkaTopics, PdpResultConfigs } from '../constants';
 
 @Injectable()
 export class PDPResultHandler extends BaseKafkaHandler {
   constructor(configService: ConfigService, databaseService: DatabaseService) {
-    super(configService, databaseService, CategoryResultConfigs.name);
+    super(configService, databaseService, PdpResultConfigs.name);
     this.params = arguments;
   }
   public validator(): Promise<void> {

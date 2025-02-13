@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import KafkaProducerService from '../kafka/kafka.producer';
-import { KafkaTopics } from '../oliveyoung/constant';
+import { KafkaTopics } from '../oliveyoung/constants';
 
 @Injectable()
 export class CronService {
