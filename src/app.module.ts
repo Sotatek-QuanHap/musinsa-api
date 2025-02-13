@@ -19,6 +19,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { KafkaModule } from './kafka/kafka.module';
 import { DatabaseModule } from './database/database.module';
 import { OliveYoungModule } from './oliveyoung/module';
+import { ConfigSynchronizerModule } from './oliveyoung/config-synchronizer/config-synchronizer.module';
 
 const infrastructureDatabaseModule = MongooseModule.forRootAsync({
   useClass: MongooseConfigService,
@@ -41,6 +42,7 @@ const infrastructureDatabaseModule = MongooseModule.forRootAsync({
     CronModule,
     KafkaModule,
     OliveYoungModule,
+    ConfigSynchronizerModule,
   ],
 })
 export class AppModule {}
