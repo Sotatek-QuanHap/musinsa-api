@@ -31,10 +31,6 @@ const infrastructureDatabaseModule = MongooseModule.forRootAsync({
       load: [databaseConfig, authConfig, appConfig],
       envFilePath: ['.env'],
     }),
-    MongooseModule.forRoot(
-      process.env.DATABASE_URL ||
-        'mongodb://admin:password@localhost:27017/api?authSource=admin',
-    ),
     ScheduleModule.forRoot(),
     infrastructureDatabaseModule,
     DatabaseModule,

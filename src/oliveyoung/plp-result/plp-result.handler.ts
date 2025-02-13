@@ -20,10 +20,16 @@ export class PLPResultHandler extends BaseKafkaHandler {
   }
 
   public async process(data: any): Promise<any> {
-    await this.plpResultService.create({
-      categoryId: data.categoryId,
-      metadata: data.productList,
-    });
+    await this.databaseService.plpResult.updateOne(
+      {
+        categoryId: data.categoryId,
+      },
+      {
+        categoryId: data.categoryId,
+        metadata: data.productList,
+      },
+      { upsert: true },
+    );
     for (const product of data.productList) {
       await this.kafkaProducer.send({
         topic: KafkaTopics.pdpCrawlerRequest,
