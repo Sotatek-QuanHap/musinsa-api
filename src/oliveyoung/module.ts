@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { CategoryResultModule } from './category-result/category-result.module';
+import { PDPResultModule } from './pdp-result/pdp-result.module';
 
 @Module({
-  imports: [CategoryResultModule],
+  imports: [CategoryResultModule, PDPResultModule],
   providers: [],
-  exports: [CategoryResultModule],
+  exports: [CategoryResultModule, PDPResultModule],
 })
 export class OliveYoungModule {}

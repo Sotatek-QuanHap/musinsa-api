@@ -59,6 +59,10 @@ class EnvironmentVariablesValidator {
   @IsInt()
   @IsOptional()
   OLIVE_YOUNG_CATEGORY_RESULT_NUMBER: number;
+
+  @IsInt()
+  @IsOptional()
+  OLIVE_YOUNG_PDP_RESULT_NUMBER: number;
 }
 
 export default registerAs<AppConfig>('app', () => {
@@ -85,6 +89,7 @@ export default registerAs<AppConfig>('app', () => {
     oliveYoung: {
       numberOfCategoryResult:
         process.env.OLIVE_YOUNG_CATEGORY_RESULT_NUMBER || 0,
+      numberOfPdpResult: process.env.OLIVE_YOUNG_PDP_RESULT_NUMBER || 0,
     },
   };
 });

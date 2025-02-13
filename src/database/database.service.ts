@@ -6,6 +6,7 @@ import {
   ParserConfig,
   ParserConfigSchemaDocument,
 } from './schema/parser-config.schema';
+import { Product, ProductSchemaDocument } from './schema/product.schema';
 
 @Injectable()
 export class DatabaseService {
@@ -13,5 +14,6 @@ export class DatabaseService {
     @InjectModel(Category.name) public category: Model<CategorySchemaDocument>,
     @InjectModel(ParserConfig.name)
     public parserConfig: Model<ParserConfigSchemaDocument>,
+    @InjectModel(Product.name) public product: Model<ProductSchemaDocument>,
   ) {}
 }

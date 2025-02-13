@@ -6,6 +6,7 @@ import {
   ParserConfig,
   ParserConfigSchema,
 } from './schema/parser-config.schema';
+import { Product, ProductSchema } from './schema/product.schema';
 
 @Global()
 @Module({
@@ -22,6 +23,13 @@ import {
         name: ParserConfig.name,
         useFactory: () => {
           const schema = ParserConfigSchema;
+          return schema;
+        },
+      },
+      {
+        name: Product.name,
+        useFactory: () => {
+          const schema = ProductSchema;
           return schema;
         },
       },
