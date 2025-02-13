@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { KafkaTopics, PLPResultConfigs } from '../constants';
 import { PLPResultService } from './plp-result.service';
 import KafkaProducerService from '../../kafka/kafka.producer';
+import { DatabaseService } from '../../database/database.service';
 
 @Injectable()
 export class PLPResultHandler extends BaseKafkaHandler {
@@ -12,8 +13,9 @@ export class PLPResultHandler extends BaseKafkaHandler {
     configService: ConfigService,
     private readonly plpResultService: PLPResultService,
     private readonly kafkaProducer: KafkaProducerService,
+    databaseService: DatabaseService,
   ) {
-    super(configService, PLPResultConfigs.name);
+    super(configService, databaseService, PLPResultConfigs.name);
     this.params = arguments;
   }
 
