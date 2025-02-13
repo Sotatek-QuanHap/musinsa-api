@@ -4,7 +4,11 @@ import { BaseKafkaHandler } from '../../utils/base.handler';
 import { SandyLogger } from '../../utils/sandy.logger';
 import { ConfigService } from '@nestjs/config';
 import { DatabaseService } from '../../database/database.service';
-import { CategoryResultConfigs, KafkaTopics } from '../constant';
+import {
+  CategoryResultConfigs,
+  KafkaTopics,
+  OliveYoungPlatform,
+} from '../constant';
 
 @Injectable()
 export class CategoryResultHandler extends BaseKafkaHandler {
@@ -17,8 +21,8 @@ export class CategoryResultHandler extends BaseKafkaHandler {
   }
 
   async process(data: any, logger: SandyLogger): Promise<any> {
-    logger.log('Start process');
     await this.saveCategories(data.parsedCategory);
+    logger.log('Successfully processed parser request.');
   }
 
   async saveCategories(
@@ -27,15 +31,15 @@ export class CategoryResultHandler extends BaseKafkaHandler {
     level = 1,
   ) {
     for (const category of categories) {
-      const field = category.id ? 'id' : 'name';
+      const id = category.id ?? category.name;
       const savedCategory =
         await this.databaseService.category.findOneAndUpdate(
-          { [field]: category[field] },
+          { id, platform: OliveYoungPlatform },
           {
             name: category.name,
             id: category.id,
             url: category.url,
-            platform: 'olive-young',
+            platform: OliveYoungPlatform,
             level,
             parentCategory,
           },

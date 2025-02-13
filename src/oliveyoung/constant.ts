@@ -14,3 +14,5 @@ export const CategoryResultConfigs = {
   name: 'olive-young.category-result',
   groupId: 'olive-young-category-result-group',
 };
+
+export const OliveYoungPlatform = 'olive-young';

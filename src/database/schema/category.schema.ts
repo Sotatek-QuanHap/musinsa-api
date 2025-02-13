@@ -14,7 +14,6 @@ export type CategorySchemaDocument = HydratedDocument<Category>;
 export class Category extends EntityDocumentHelper {
   @Prop({
     type: String,
-    unique: true,
   })
   id: string;
 
@@ -29,9 +28,9 @@ export class Category extends EntityDocumentHelper {
   url: string;
 
   @Prop({
-    type: String,
+    type: Number,
   })
-  level: string;
+  level: number;
 
   @Prop({
     type: String,
@@ -55,3 +54,4 @@ export class Category extends EntityDocumentHelper {
 }
 
 export const CategorySchema = SchemaFactory.createForClass(Category);
+CategorySchema.index({ id: 1, platform: 1 }, { unique: true });
