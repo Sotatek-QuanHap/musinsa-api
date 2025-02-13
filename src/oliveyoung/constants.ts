@@ -12,4 +12,10 @@ export const KafkaTopics = {
 
   pdpCrawlerRequest: 'olive-young.pdp-crawler.request',
   pdpParserRequest: 'olive-young.pdp-parser.request',
+  pdpResult: 'olive-young.pdp.result',
+};
+
+export const CategoryResultConfigs = {
+  name: 'olive-young.category-result',
+  groupId: 'olive-young-category-result-group',
 };

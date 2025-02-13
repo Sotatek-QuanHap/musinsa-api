@@ -4,7 +4,7 @@ import { BaseKafkaHandler } from '../../utils/base.handler';
 import { SandyLogger } from '../../utils/sandy.logger';
 import { ConfigService } from '@nestjs/config';
 import { DatabaseService } from '../../database/database.service';
-import { CategoryResultConfigs, KafkaTopics } from '../constant';
+import { CategoryResultConfigs, KafkaTopics } from '../constants';
 
 @Injectable()
 export class PDPResultHandler extends BaseKafkaHandler {
