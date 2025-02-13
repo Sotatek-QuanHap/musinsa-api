@@ -4,7 +4,6 @@ import { Transform } from 'class-transformer';
 import { lowerCaseTransformer } from '../../utils/transformers/lower-case.transformer';
 
 export class AuthUpdateDto {
-
   @ApiPropertyOptional({ example: 'John' })
   @IsOptional()
   @IsNotEmpty({ message: 'mustBeNotEmpty' })
