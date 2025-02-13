@@ -3,7 +3,6 @@ import { Injectable } from '@nestjs/common';
 import { BaseKafkaHandler } from '../../utils/base.handler';
 import { ConfigService } from '@nestjs/config';
 import { KafkaTopics, PLPResultConfigs } from '../constants';
-import { PLPResultService } from './plp-result.service';
 import KafkaProducerService from '../../kafka/kafka.producer';
 import { DatabaseService } from '../../database/database.service';
 
@@ -11,7 +10,6 @@ import { DatabaseService } from '../../database/database.service';
 export class PLPResultHandler extends BaseKafkaHandler {
   constructor(
     configService: ConfigService,
-    private readonly plpResultService: PLPResultService,
     private readonly kafkaProducer: KafkaProducerService,
     databaseService: DatabaseService,
   ) {
