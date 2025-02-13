@@ -19,6 +19,9 @@ export class Product extends EntityDocumentHelper {
   productId: string;
 
   @Prop()
+  productUrl: string;
+
+  @Prop()
   category: string;
 
   @Prop()
@@ -35,6 +38,9 @@ export class Product extends EntityDocumentHelper {
 
   @Prop()
   finalPrice: number;
+
+  @Prop()
+  couponPrice: number;
 
   @Prop()
   reviewCount: string;
