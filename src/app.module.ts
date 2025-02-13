@@ -35,31 +35,7 @@ const infrastructureDatabaseModule = MongooseModule.forRootAsync({
     ScheduleModule.forRoot(),
     infrastructureDatabaseModule,
     DatabaseModule,
-    // I18nModule.forRootAsync({
-    //   useFactory: (configService: ConfigService<AllConfigType>) => ({
-    //     fallbackLanguage: configService.getOrThrow('app.fallbackLanguage', {
-    //       infer: true,
-    //     }),
-    //     loaderOptions: { path: path.join(__dirname, '/i18n/'), watch: true },
-    //   }),
-    //   resolvers: [
-    //     {
-    //       use: HeaderResolver,
-    //       useFactory: (configService: ConfigService<AllConfigType>) => {
-    //         return [
-    //           configService.get('app.headerLanguage', {
-    //             infer: true,
-    //           }),
-    //         ];
-    //       },
-    //       inject: [ConfigService],
-    //     },
-    //   ],
-    //   imports: [ConfigModule],
-    //   inject: [ConfigService],
-    // }),
     UsersModule,
-    // FilesModule,
     AuthModule,
     SessionModule,
     HomeModule,
