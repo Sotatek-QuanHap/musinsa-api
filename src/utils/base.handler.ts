@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ConfigService } from '@nestjs/config';
 import { SandyLogger } from './sandy.logger';
+import { DatabaseService } from '../database/database.service';
 
 export abstract class BaseKafkaHandler {
   public name: string;
@@ -10,6 +11,7 @@ export abstract class BaseKafkaHandler {
 
   constructor(
     protected configService: ConfigService,
+    protected databaseService: DatabaseService,
     name: string,
     ...params: any[]
   ) {
