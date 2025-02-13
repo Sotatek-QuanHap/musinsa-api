@@ -8,7 +8,7 @@ import {
   CategoryResultConfigs,
   KafkaTopics,
   OliveYoungPlatform,
-} from '../constant';
+} from '../constants';
 
 @Injectable()
 export class CategoryResultHandler extends BaseKafkaHandler {
