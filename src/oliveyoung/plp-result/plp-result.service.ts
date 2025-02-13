@@ -1,6 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { PLPResult, PlpResultDocument } from './schema/plp-result.schema';
+import {
+  PLPResult,
+  PlpResultDocument,
+} from '../../database/schema/plp-result.schema';
 import { Model } from 'mongoose';
 
 @Injectable()

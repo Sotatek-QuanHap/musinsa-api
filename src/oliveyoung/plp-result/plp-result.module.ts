@@ -5,7 +5,10 @@ import { KafkaModule } from '../../kafka/kafka.module';
 import { ConfigModule } from '@nestjs/config';
 import { PLPResultService } from './plp-result.service'; // Import the service
 import { MongooseModule } from '@nestjs/mongoose';
-import { PLPResult, PLPResultSchema } from './schema/plp-result.schema';
+import {
+  PLPResult,
+  PLPResultSchema,
+} from '../../database/schema/plp-result.schema';
 
 @Module({
   controllers: [],
