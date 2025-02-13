@@ -19,7 +19,7 @@ export class Product extends EntityDocumentHelper {
   productId: string;
 
   @Prop()
-  productUrl: string;
+  url: string;
 
   @Prop()
   category: string;
