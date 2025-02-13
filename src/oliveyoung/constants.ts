@@ -6,6 +6,7 @@ export const PLPResultConfigs = {
 export const KafkaTopics = {
   categoryCrawlerRequest: 'olive-young.category-crawler.request',
   categoryParserRequest: 'olive-young.category-parser.request',
+  categoryResult: 'olive-young.category.result',
 
   plpCrawlerRequest: 'olive-young.plp-crawler.request',
   plpParserRequest: 'olive-young.plp-parser.request',
@@ -19,3 +20,10 @@ export const CategoryResultConfigs = {
   name: 'olive-young.category-result',
   groupId: 'olive-young-category-result-group',
 };
+
+export const PdpResultConfigs = {
+  name: 'olive-young.pdp-result',
+  groupId: 'olive-young-pdp-result-group',
+};
+
+export const OliveYoungPlatform = 'olive-young';
