@@ -1,0 +1,17 @@
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: musinsa-api
+    ports:
+      - "5165:5165"
+    networks:
+      - musinsa_network
+
+networks:
+  musinsa_network: 
+    name: musinsa_network
+    external: true
+

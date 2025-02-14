@@ -1,0 +1,104 @@
+services:
+  # maildev:
+  #   build:
+  #     context: .
+  #     dockerfile: maildev.Dockerfile
+  #   ports:
+  #     - ${MAIL_CLIENT_PORT}:1080
+  #     - ${MAIL_PORT}:1025
+
+  mongo:
+    image: mongo:8.0.4
+    hostname: musinsa-mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DATABASE_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+    volumes:
+      - boilerplate-mongo-db:/data/db
+    ports:
+      - ${DATABASE_PORT}:27017
+    networks:
+      - musinsa_network
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 9091:8081
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: ${DATABASE_USERNAME}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${DATABASE_PASSWORD}
+      ME_CONFIG_MONGODB_URL: mongodb://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@mongo:${DATABASE_PORT}/
+    networks:
+      - musinsa_network
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.0
+    hostname: musinsa-zookeeper
+    networks:
+      - musinsa_network
+    ports:
+      - "2182:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_SERVERS: zookeeper:2888:3888
+
+  musinsa-kafka:
+    image: confluentinc/cp-kafka:7.3.0
+    hostname: musinsa-kafka
+    container_name: musinsa-kafka
+    ports:
+      - "9094:9094"
+      - "29092:29092"
+    networks:
+      - musinsa_network
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://musinsa-kafka:29092,PLAINTEXT_HOST://musinsa-kafka:9094'
+      KAFKA_ZOOKEEPER_CONNECT: "musinsa-zookeeper:2181"
+      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_MESSAGE_MAX_BYTES: 10485760  # 10MB
+      KAFKA_REPLICA_FETCH_MAX_BYTES: 10485760 # 10MB for followers
+      KAFKA_FETCH_MESSAGE_MAX_BYTES: 10485760 # 10MB for consumers
+    depends_on:
+      - zookeeper
+
+  kafka-ui:
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui:latest
+    networks:
+      - musinsa_network
+    ports:
+      - 8081:8080
+    environment:
+      DYNAMIC_CONFIG_ENABLED: 'true'
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: musinsa-kafka:29092
+    depends_on:
+      - musinsa-kafka
+  # Uncomment to use redis
+  # redis:
+  #   image: redis:7-alpine
+  #   ports:
+  #     - 6379:6379
+
+  # api:
+  #   build:
+  #     context: .
+  #     dockerfile: document.Dockerfile
+  #   ports:
+  #     - ${APP_PORT}:${APP_PORT}
+
+volumes:
+  boilerplate-mongo-db:
+
+networks:
+  musinsa_network: 
+    name: musinsa_network
+    external: true
+    driver: bridge
