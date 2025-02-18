@@ -4,7 +4,11 @@ import { BaseKafkaHandler } from '../../utils/base.handler';
 import { SandyLogger } from '../../utils/sandy.logger';
 import { ConfigService } from '@nestjs/config';
 import { DatabaseService } from '../../database/database.service';
-import { KafkaTopics, PdpResultConfigs } from '../constants';
+import {
+  KafkaTopics,
+  OliveYoungPlatform,
+  PdpResultConfigs,
+} from '../constants';
 
 @Injectable()
 export class PDPResultHandler extends BaseKafkaHandler {
@@ -22,7 +26,14 @@ export class PDPResultHandler extends BaseKafkaHandler {
   }
 
   async saveParsedProduct(parsedData: any) {
-    await this.databaseService.product.create(parsedData);
+    await this.databaseService.product.findOneAndUpdate(
+      { platform: OliveYoungPlatform, productId: parsedData.productId },
+      {
+        ...parsedData,
+        platform: OliveYoungPlatform,
+      },
+      { new: true, upsert: true },
+    );
   }
 
   getTopicNames(): string {
