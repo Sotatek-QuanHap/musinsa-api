@@ -92,5 +92,10 @@ export default registerAs<AppConfig>('app', () => {
         process.env.OLIVE_YOUNG_CATEGORY_RESULT_NUMBER || 0,
       numberOfPdpResult: process.env.OLIVE_YOUNG_PDP_RESULT_NUMBER || 0,
     },
+    ably: {
+      numberOfPlpResult: process.env.ABLY_PLP_RESULT_NUMBER || 0,
+      numberOfCategoryResult: process.env.ABLY_CATEGORY_RESULT_NUMBER || 0,
+      numberOfPdpResult: process.env.ABLY_PDP_RESULT_NUMBER || 0,
+    },
   };
 });
