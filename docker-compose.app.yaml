@@ -9,8 +9,6 @@ services:
       - "5165:5165"
     networks:
       - musinsa_network
-    volumes:
-      - ./:/home/node/app/:rw
 
 networks:
   musinsa_network: 

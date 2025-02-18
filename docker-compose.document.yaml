@@ -9,7 +9,7 @@ services:
 
   mongo:
     image: mongo:8.0.4
-    container_name: musinsa-mongo
+    hostname: musinsa-mongo
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${DATABASE_USERNAME}
@@ -35,7 +35,6 @@ services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.0
     hostname: musinsa-zookeeper
-    container_name: musinsa-zookeeper
     networks:
       - musinsa_network
     ports:
@@ -57,7 +56,7 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
-      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://musinsa-kafka:29092,PLAINTEXT_HOST://localhost:9094'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://musinsa-kafka:29092,PLAINTEXT_HOST://musinsa-kafka:9094'
       KAFKA_ZOOKEEPER_CONNECT: "musinsa-zookeeper:2181"
       KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
@@ -99,7 +98,7 @@ volumes:
   boilerplate-mongo-db:
 
 networks:
-  musinsa_network:
+  musinsa_network: 
     name: musinsa_network
     external: true
     driver: bridge

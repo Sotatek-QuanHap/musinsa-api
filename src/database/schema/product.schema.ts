@@ -54,6 +54,18 @@ export class Product extends EntityDocumentHelper {
   @Prop({ type: mongoose.Schema.Types.Mixed })
   extraInfo: any;
 
+  @Prop({ type: mongoose.Schema.Types.Mixed })
+  options: any;
+
+  @Prop()
+  url: string;
+
+  @Prop()
+  image: string;
+
+  @Prop()
+  soldOut: string;
+
   @Prop()
   platform: string;
 
