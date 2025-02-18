@@ -18,7 +18,7 @@ export class CronService {
     });
   }
 
-  @Cron(CronExpression.EVERY_HOUR)
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async handleCronCategoryCrawlerRequest() {
     await this.kafkaProducer.send({
       topic: KafkaTopics.categoryCrawlerRequest,

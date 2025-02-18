@@ -94,6 +94,7 @@ export default registerAs<AppConfig>('app', () => {
     },
     ably: {
       numberOfPdpResult: process.env.ABLY_PDP_RESULT_NUMBER || 0,
+      numberOfCategoryResult: process.env.ABLY_CATEGORY_RESULT_NUMBER || 0,
     },
   };
 });
