@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Module } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
@@ -8,7 +7,6 @@ import appConfig from './config/app.config';
 import { ConfigModule } from '@nestjs/config';
 import { HomeModule } from './home/home.module';
 import { SessionModule } from './session/session.module';
-// import { MailerModule } from './mailer/mailer.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MongooseConfigService } from './database/mongoose-config.service';
 import { CronModule } from './cron/cron.module';
@@ -17,6 +15,7 @@ import { KafkaModule } from './kafka/kafka.module';
 import { DatabaseModule } from './database/database.module';
 import { OliveYoungModule } from './oliveyoung/module';
 import { ConfigSynchronizerModule } from './oliveyoung/config-synchronizer/config-synchronizer.module';
+import { AblyModule } from './ably/module';
 
 const infrastructureDatabaseModule = MongooseModule.forRootAsync({
   useClass: MongooseConfigService,
@@ -39,6 +38,7 @@ const infrastructureDatabaseModule = MongooseModule.forRootAsync({
     CronModule,
     KafkaModule,
     OliveYoungModule,
+    AblyModule,
     ConfigSynchronizerModule,
   ],
 })
