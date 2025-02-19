@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Module } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
@@ -17,6 +16,7 @@ import { KafkaModule } from './kafka/kafka.module';
 import { DatabaseModule } from './database/database.module';
 import { OliveYoungModule } from './oliveyoung/module';
 import { ConfigSynchronizerModule } from './oliveyoung/config-synchronizer/config-synchronizer.module';
+import { AblyModule } from './ably/ably.module';
 
 const infrastructureDatabaseModule = MongooseModule.forRootAsync({
   useClass: MongooseConfigService,
@@ -39,6 +39,7 @@ const infrastructureDatabaseModule = MongooseModule.forRootAsync({
     CronModule,
     KafkaModule,
     OliveYoungModule,
+    AblyModule,
     ConfigSynchronizerModule,
   ],
 })
