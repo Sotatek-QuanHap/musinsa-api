@@ -4,11 +4,7 @@ import { BaseKafkaHandler } from '../../utils/base.handler';
 import { SandyLogger } from '../../utils/sandy.logger';
 import { ConfigService } from '@nestjs/config';
 import { DatabaseService } from '../../database/database.service';
-import {
-  KafkaTopics,
-  OliveYoungPlatform,
-  PdpResultConfigs,
-} from '../constants';
+import { AblyPlatform, KafkaTopics, PdpResultConfigs } from '../constants';
 
 @Injectable()
 export class PDPResultHandler extends BaseKafkaHandler {
@@ -22,16 +18,13 @@ export class PDPResultHandler extends BaseKafkaHandler {
 
   async process(data: any, logger: SandyLogger): Promise<any> {
     await this.saveParsedProduct(data);
-    logger.log('Successfully processed parser request.');
+    logger.log('Successfully saved parsed product.');
   }
 
   async saveParsedProduct(parsedData: any) {
     await this.databaseService.product.findOneAndUpdate(
-      { platform: OliveYoungPlatform, productId: parsedData.productId },
-      {
-        ...parsedData,
-        platform: OliveYoungPlatform,
-      },
+      { platform: AblyPlatform, productId: parsedData.productId },
+      { platform: AblyPlatform, ...parsedData },
       { new: true, upsert: true },
     );
   }
@@ -41,7 +34,7 @@ export class PDPResultHandler extends BaseKafkaHandler {
   }
 
   getCount(): number {
-    return this.configService.get('app.oliveYoung.numberOfPdpResult', 0, {
+    return this.configService.get('app.ably.numberOfPdpResult', 0, {
       infer: true,
     });
   }
