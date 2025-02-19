@@ -66,6 +66,9 @@ export class Product extends EntityDocumentHelper {
   @Prop()
   platform: string;
 
+  @Prop()
+  raw?: string;
+
   @Prop({ default: now })
   createdAt: Date;
 
@@ -77,3 +80,4 @@ export class Product extends EntityDocumentHelper {
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
+ProductSchema.index({ platform: 1, productId: 1 }, { unique: true });
