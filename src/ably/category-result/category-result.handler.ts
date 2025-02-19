@@ -7,7 +7,7 @@ import { DatabaseService } from '../../database/database.service';
 import {
   CategoryResultConfigs,
   KafkaTopics,
-  OLIVE_YOUNG_PLATFORM,
+  ABLY_PLATFORM,
 } from '../constants';
 import { CategoryService } from '../../category/category.service';
 
@@ -28,7 +28,7 @@ export class CategoryResultHandler extends BaseKafkaHandler {
   async process(data: any, logger: SandyLogger): Promise<any> {
     await this.categoryService.saveCategories({
       categories: data.parsedCategory,
-      platform: OLIVE_YOUNG_PLATFORM,
+      platform: ABLY_PLATFORM,
     });
     logger.log('Successfully processed parser request.');
   }
@@ -38,7 +38,7 @@ export class CategoryResultHandler extends BaseKafkaHandler {
   }
 
   getCount(): number {
-    return this.configService.get('app.oliveYoung.numberOfCategoryResult', 0, {
+    return this.configService.get('app.ably.numberOfCategoryResult', 0, {
       infer: true,
     });
   }
