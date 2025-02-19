@@ -4,7 +4,7 @@ import { BaseKafkaHandler } from '../../utils/base.handler';
 import { SandyLogger } from '../../utils/sandy.logger';
 import { ConfigService } from '@nestjs/config';
 import { DatabaseService } from '../../database/database.service';
-import { AblyPlatform, KafkaTopics, PdpResultConfigs } from '../constants';
+import { ABLY_PLATFORM, KafkaTopics, PdpResultConfigs } from '../constants';
 
 @Injectable()
 export class PDPResultHandler extends BaseKafkaHandler {
@@ -23,8 +23,8 @@ export class PDPResultHandler extends BaseKafkaHandler {
 
   async saveParsedProduct(parsedData: any) {
     await this.databaseService.product.findOneAndUpdate(
-      { platform: AblyPlatform, productId: parsedData.productId },
-      { platform: AblyPlatform, ...parsedData },
+      { platform: ABLY_PLATFORM, productId: parsedData.productId },
+      { platform: ABLY_PLATFORM, ...parsedData },
       { new: true, upsert: true },
     );
   }

@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { DatabaseService } from '../../database/database.service';
 import {
   KafkaTopics,
-  OliveYoungPlatform,
+  OLIVE_YOUNG_PLATFORM,
   PdpResultConfigs,
 } from '../constants';
 
@@ -27,10 +27,10 @@ export class PDPResultHandler extends BaseKafkaHandler {
 
   async saveParsedProduct(parsedData: any) {
     await this.databaseService.product.findOneAndUpdate(
-      { platform: OliveYoungPlatform, productId: parsedData.productId },
+      { platform: OLIVE_YOUNG_PLATFORM, productId: parsedData.productId },
       {
         ...parsedData,
-        platform: OliveYoungPlatform,
+        platform: OLIVE_YOUNG_PLATFORM,
       },
       { new: true, upsert: true },
     );
