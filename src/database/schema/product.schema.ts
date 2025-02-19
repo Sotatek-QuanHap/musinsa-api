@@ -67,6 +67,9 @@ export class Product extends EntityDocumentHelper {
   image: string;
 
   @Prop()
+  extraImages: string[];
+
+  @Prop()
   soldOut: string;
 
   @Prop()
