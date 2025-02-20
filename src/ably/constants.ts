@@ -26,4 +26,5 @@ export const PdpResultConfigs = {
   groupId: 'ably-pdp-result-group',
 };
 
-export const Platform = 'ably';
+export const ABLY_PLATFORM = 'ably';
+
