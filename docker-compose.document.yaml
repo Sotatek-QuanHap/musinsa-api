@@ -7,6 +7,19 @@ services:
   #     - ${MAIL_CLIENT_PORT}:1080
   #     - ${MAIL_PORT}:1025
 
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ${SQL_DATABASE_NAME}
+      POSTGRES_PASSWORD: ${SQL_DATABASE_PASSWORD}
+    volumes:
+      - sql-data:/var/lib/postgresql/data
+    ports:
+      - ${SQL_DATABASE_PORT}:5432
+    networks:
+      - musinsa_network
+
   mongo:
     image: mongo:8.0.4
     hostname: musinsa-mongo
@@ -56,7 +69,7 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
-      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://musinsa-kafka:29092,PLAINTEXT_HOST://musinsa-kafka:9094'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://musinsa-kafka:29092,PLAINTEXT_HOST://localhost:9094'
       KAFKA_ZOOKEEPER_CONNECT: "musinsa-zookeeper:2181"
       KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
@@ -96,6 +109,7 @@ services:
 
 volumes:
   boilerplate-mongo-db:
+  sql-data:
 
 networks:
   musinsa_network: 

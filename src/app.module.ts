@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import databaseConfig from './database/config/database.config';
+import sqlConfig from './sql/sql.config';
 import authConfig from './auth/config/auth.config';
 import appConfig from './config/app.config';
 import { ConfigModule } from '@nestjs/config';
@@ -17,6 +18,7 @@ import { DatabaseModule } from './database/database.module';
 import { OliveYoungModule } from './oliveyoung/module';
 import { ConfigSynchronizerModule } from './oliveyoung/config-synchronizer/config-synchronizer.module';
 import { AblyModule } from './ably/ably.module';
+import { SqlModule } from './sql/sql.module';
 
 const infrastructureDatabaseModule = MongooseModule.forRootAsync({
   useClass: MongooseConfigService,
@@ -26,7 +28,7 @@ const infrastructureDatabaseModule = MongooseModule.forRootAsync({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [databaseConfig, authConfig, appConfig],
+      load: [databaseConfig, authConfig, appConfig, sqlConfig],
       envFilePath: ['.env'],
     }),
     ScheduleModule.forRoot(),
@@ -41,6 +43,7 @@ const infrastructureDatabaseModule = MongooseModule.forRootAsync({
     OliveYoungModule,
     AblyModule,
     ConfigSynchronizerModule,
+    SqlModule,
   ],
 })
 export class AppModule {}

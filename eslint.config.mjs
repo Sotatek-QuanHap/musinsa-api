@@ -62,4 +62,7 @@ export default [
       ],
     },
   },
+  {
+    ignores: ["src/sql/migrations/"]
+  }
 ];
