@@ -4,11 +4,7 @@ import { BaseKafkaHandler } from '../../utils/base.handler';
 import { SandyLogger } from '../../utils/sandy.logger';
 import { ConfigService } from '@nestjs/config';
 import { DatabaseService } from '../../database/database.service';
-import {
-  CategoryResultConfigs,
-  KafkaTopics,
-  ABLY_PLATFORM,
-} from '../constants';
+import { CategoryResultConfigs, KafkaTopics, Platform } from '../constants';
 import { CategoryService } from '../../category/category.service';
 
 @Injectable()
@@ -28,7 +24,7 @@ export class CategoryResultHandler extends BaseKafkaHandler {
   async process(data: any, logger: SandyLogger): Promise<any> {
     await this.categoryService.saveCategories({
       categories: data.parsedCategory,
-      platform: ABLY_PLATFORM,
+      platform: Platform,
     });
     logger.log('Successfully processed parser request.');
   }

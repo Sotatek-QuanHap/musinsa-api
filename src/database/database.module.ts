@@ -8,6 +8,7 @@ import {
 } from './schema/parser-config.schema';
 import { Product, ProductSchema } from './schema/product.schema';
 import { PLPResult, PLPResultSchema } from './schema/plp-result.schema';
+import { Job, JobSchema } from './schema/job.schema';
 
 @Global()
 @Module({
@@ -38,6 +39,13 @@ import { PLPResult, PLPResultSchema } from './schema/plp-result.schema';
         name: Product.name,
         useFactory: () => {
           const schema = ProductSchema;
+          return schema;
+        },
+      },
+      {
+        name: Job.name,
+        useFactory: () => {
+          const schema = JobSchema;
           return schema;
         },
       },
