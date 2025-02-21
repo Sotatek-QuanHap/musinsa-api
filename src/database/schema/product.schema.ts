@@ -22,6 +22,12 @@ export class Product extends EntityDocumentHelper {
   url: string;
 
   @Prop()
+  sku: string;
+
+  @Prop()
+  categoryId: string;
+
+  @Prop()
   category: string;
 
   @Prop()
@@ -61,6 +67,9 @@ export class Product extends EntityDocumentHelper {
   image: string;
 
   @Prop()
+  extraImages: string[];
+
+  @Prop()
   soldOut: string;
 
   @Prop()
@@ -71,6 +80,9 @@ export class Product extends EntityDocumentHelper {
 
   @Prop({ default: false })
   _fullSynced: boolean;
+
+  @Prop({ type: mongoose.Schema.Types.Mixed })
+  hiddenFields: any;
 
   @Prop({ default: now })
   createdAt: Date;

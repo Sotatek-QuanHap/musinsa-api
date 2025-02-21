@@ -26,4 +26,4 @@ export const PdpResultConfigs = {
   groupId: 'olive-young-pdp-result-group',
 };
 
-export const OliveYoungPlatform = 'olive-young';
+export const OLIVE_YOUNG_PLATFORM = 'olive-young';
