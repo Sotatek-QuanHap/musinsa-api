@@ -14,6 +14,13 @@ async function deepResolvePromises(input) {
 
   if (typeof input === 'object' && input !== null) {
     const keys = Object.keys(input);
+    if (
+      keys.length === 1 &&
+      keys[0] === 'buffer' &&
+      Buffer.isBuffer(input.buffer)
+    ) {
+      return input.buffer.toString('hex');
+    }
     const resolvedObject = {};
 
     for (const key of keys) {

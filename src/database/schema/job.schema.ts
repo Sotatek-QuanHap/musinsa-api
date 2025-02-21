@@ -46,7 +46,7 @@ export class Job extends EntityDocumentHelper {
   @Prop({
     type: Number,
   })
-  max_attempts: number;
+  maxAttempts: number;
 
   @Prop({
     type: String,
@@ -73,7 +73,7 @@ export class Job extends EntityDocumentHelper {
   @Prop({
     type: String,
   })
-  failed_reason: string;
+  failedReason: string;
 
   @Prop({
     type: String,
@@ -81,6 +81,9 @@ export class Job extends EntityDocumentHelper {
     required: true,
   })
   platform: Platform;
+
+  @Prop({ type: Date })
+  endDate: Date;
 }
 
 export const JobSchema = SchemaFactory.createForClass(Job);
