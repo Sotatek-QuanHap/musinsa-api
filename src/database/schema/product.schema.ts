@@ -69,6 +69,9 @@ export class Product extends EntityDocumentHelper {
   @Prop()
   raw?: string;
 
+  @Prop({ default: false })
+  _fullSynced: boolean;
+
   @Prop({ default: now })
   createdAt: Date;
 

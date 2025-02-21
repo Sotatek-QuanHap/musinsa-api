@@ -8,6 +8,14 @@ import {
   ParserConfigSchemaDocument,
 } from './schema/parser-config.schema';
 import { Product, ProductSchemaDocument } from './schema/product.schema';
+import {
+  ProductHistory,
+  ProductHistorySchemaDocument,
+} from './schema/product-history.schema';
+import {
+  DbsyncConfig,
+  DbsyncConfigSchemaDocument,
+} from './schema/dbsync-config.schema';
 
 @Injectable()
 export class DatabaseService {
@@ -17,5 +25,9 @@ export class DatabaseService {
     @InjectModel(ParserConfig.name)
     public parserConfig: Model<ParserConfigSchemaDocument>,
     @InjectModel(Product.name) public product: Model<ProductSchemaDocument>,
+    @InjectModel(ProductHistory.name)
+    public productHistory: Model<ProductHistorySchemaDocument>,
+    @InjectModel(DbsyncConfig.name)
+    public dbSyncConfig: Model<DbsyncConfigSchemaDocument>,
   ) {}
 }
