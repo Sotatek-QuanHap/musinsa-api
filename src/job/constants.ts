@@ -8,9 +8,6 @@ export const JobConfigs = {
 };
 
 export const ToppingMapping = {
-  [Platform.OLIVE_YOUNG]: {
-    topic: OliveYoungTopics.plpCrawlerRequest,
-    messageKey: 'url',
-  },
+  [Platform.OLIVE_YOUNG]: OliveYoungTopics.plpCrawlerRequest,
   [Platform.ABLY]: AblyTopics.plpCrawlerRequest,
 };

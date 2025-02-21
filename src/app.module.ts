@@ -15,8 +15,8 @@ import { KafkaModule } from './kafka/kafka.module';
 import { DatabaseModule } from './database/database.module';
 import { OliveYoungModule } from './oliveyoung/module';
 import { ConfigSynchronizerModule } from './oliveyoung/config-synchronizer/config-synchronizer.module';
-import { AblyModule } from './ably/module';
 import { JobModule } from './job/job.module';
+import { AblyModule } from './ably/ably.module';
 
 const infrastructureDatabaseModule = MongooseModule.forRootAsync({
   useClass: MongooseConfigService,

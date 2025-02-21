@@ -16,11 +16,17 @@ export class JobService {
     const jobData = await this.databaseService.job.create(createJobDto);
     switch (createJobDto.type) {
       case JobType.GET_PRODUCT:
-        for (const category of createJobDto.categories) {
+        const { categories } = createJobDto;
+        const categoryDatas = await this.databaseService.category.find({
+          _id: { $in: categories },
+        });
+        for (const category of categoryDatas) {
           await this.kafkaProducer.send({
-            topic: ToppingMapping[createJobDto.platform]['topic'],
+            topic: ToppingMapping[createJobDto.platform],
             message: JSON.stringify({
-              [ToppingMapping[createJobDto.platform]['messageKey']]: category,
+              jobId: jobData.id,
+              url: category.url,
+              categoryId: category.id,
             }),
             key: Date.now().toString(),
           });
@@ -40,8 +46,18 @@ export class JobService {
     return `This action returns a #${id} job`;
   }
 
-  update(id: number, updateJobDto: UpdateJobDto) {
-    return `This action updates a #${id} job`;
+  async update(id: string, updateJobDto: UpdateJobDto) {
+    console.log('updateJobDto', updateJobDto);
+    return await this.databaseService.job.updateOne(
+      { _id: id },
+      {
+        $set: updateJobDto,
+      },
+    );
+  }
+
+  updateSummary(id: string, summaryPayload: any) {
+    return this.databaseService.job.updateOne({ _id: id }, summaryPayload);
   }
 
   remove(id: number) {

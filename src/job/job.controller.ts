@@ -42,7 +42,7 @@ export class JobController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateJobDto: UpdateJobDto) {
-    return this.jobService.update(+id, updateJobDto);
+    return this.jobService.update(id, updateJobDto);
   }
 
   @Delete(':id')

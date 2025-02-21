@@ -1,7 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { EntityDocumentHelper } from '../../utils/document-entity-helper';
-import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
+import { HydratedDocument, Schema as MongooseSchema, Types } from 'mongoose';
 import { IsEnum } from 'class-validator';
+import { Category } from './category.schema';
 
 export enum JobStatus {
   PROCESSING = 'PROCESSING',
@@ -33,9 +34,10 @@ export class Job extends EntityDocumentHelper {
   state: MongooseSchema.Types.Mixed;
 
   @Prop({
-    type: MongooseSchema.Types.Mixed,
+    type: Object,
+    default: {},
   })
-  payload: MongooseSchema.Types.Mixed;
+  payload: Record<string, any>;
 
   @Prop({
     type: Number,
@@ -46,7 +48,7 @@ export class Job extends EntityDocumentHelper {
   @Prop({
     type: Number,
   })
-  max_attempts: number;
+  maxAttempts: number;
 
   @Prop({
     type: String,
@@ -73,7 +75,7 @@ export class Job extends EntityDocumentHelper {
   @Prop({
     type: String,
   })
-  failed_reason: string;
+  failedReason: string;
 
   @Prop({
     type: String,
@@ -81,6 +83,27 @@ export class Job extends EntityDocumentHelper {
     required: true,
   })
   platform: Platform;
+
+  @Prop({
+    type: Object,
+    default: {
+      total: 0,
+      pending: 0,
+      processing: 0,
+      failed: 0,
+      completed: 0,
+    },
+  })
+  summary: {
+    total: number;
+    pending: number;
+    processing: number;
+    failed: number;
+    completed: number;
+  };
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: Category.name }] })
+  categories: Types.ObjectId[];
 }
 
 export const JobSchema = SchemaFactory.createForClass(Job);
