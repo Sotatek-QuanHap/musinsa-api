@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { now, HydratedDocument } from 'mongoose';
+import { HydratedDocument } from 'mongoose';
 import { EntityDocumentHelper } from '../../utils/document-entity-helper';
 
 export type JobTypeSchemaDocument = HydratedDocument<JobType>;
@@ -13,13 +13,7 @@ export type JobTypeSchemaDocument = HydratedDocument<JobType>;
 })
 export class JobType extends EntityDocumentHelper {
   @Prop({ type: String, unique: true })
-  name: string;
-
-  @Prop({ default: now })
-  createdAt: Date;
-
-  @Prop({ default: now })
-  updatedAt: Date;
+  key: string;
 }
 
 export const JobTypeSchema = SchemaFactory.createForClass(JobType);

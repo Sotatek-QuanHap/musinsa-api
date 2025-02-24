@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
-import { JobType, Platform } from '../../database/schema/job.schema';
+import { Platform } from '../../database/schema/job.schema';
+import { JobType } from '../../config/constants';
 
 export class CreateJobDto {
   @ApiProperty({

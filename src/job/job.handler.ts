@@ -31,7 +31,7 @@ export class JobHandler extends BaseKafkaHandler {
 
     await comsumer.run({
       eachMessage: async ({ topic, message }): Promise<void> => {
-        console.log('JobHandler process topic: ', topic);
+        // console.log('JobHandler process topic: ', topic);
         const data = JSON.parse(
           message?.value ? message.value.toString() : '{}',
         );

@@ -11,7 +11,6 @@ import {
 } from '../constants';
 import { JobStatus } from '../../database/schema/job.schema';
 import KafkaProducerService from '../../kafka/kafka.producer';
-import { KafkaTopics } from '../../config/constants';
 
 @Injectable()
 export class PDPResultHandler extends BaseKafkaHandler {
@@ -43,25 +42,27 @@ export class PDPResultHandler extends BaseKafkaHandler {
   }
 
   async updateJobSummary(jobId: string) {
-    await this.kafkaProducer.send({
-      topic: KafkaTopics.updateJobSummary,
-      message: JSON.stringify({
-        jobId,
-        payload: {
-          $inc: {
-            'summary.completed': 1,
-            'summary.processing': -1,
-          },
+    await this.databaseService.job.updateOne(
+      {
+        _id: jobId,
+      },
+      {
+        $inc: {
+          'summary.completed': 1,
+          'summary.processing': -1,
         },
-      }),
-    });
+      },
+    );
   }
 
   async updateJobStatus(jobId: string) {
     await this.databaseService.job.updateOne(
       {
         _id: jobId,
-        $expr: { $eq: ['$summary.completed', '$summary.total'] },
+        $and: [
+          { $expr: { $eq: ['$summary.completed', '$summary.total'] } },
+          { 'summary.total': { $gt: 0 } },
+        ],
       },
       {
         $set: {

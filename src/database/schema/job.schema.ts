@@ -3,6 +3,8 @@ import { EntityDocumentHelper } from '../../utils/document-entity-helper';
 import { HydratedDocument, Schema as MongooseSchema, Types } from 'mongoose';
 import { IsEnum } from 'class-validator';
 import { Category } from './category.schema';
+import { Product } from './product.schema';
+import { JobType } from './job-type.schema';
 
 export enum JobStatus {
   PROCESSING = 'PROCESSING',
@@ -10,10 +12,7 @@ export enum JobStatus {
   COMPLETED = 'COMPLETED',
   FAILED = 'FAILED',
 }
-export enum JobType {
-  GET_PRODUCT = 'GET_PRODUCT',
-  GET_CATEGORY = 'GET_CATEGORY',
-}
+
 export enum Platform {
   OLIVE_YOUNG = 'olive-young',
   ABLY = 'ably',
@@ -59,13 +58,8 @@ export class Job extends EntityDocumentHelper {
   @IsEnum(JobStatus)
   status: JobStatus;
 
-  @Prop({
-    type: String,
-    enum: JobType,
-    required: true,
-  })
-  @IsEnum(JobType)
-  type: JobType;
+  @Prop({ type: { type: Types.ObjectId, ref: JobType.name, require: true } })
+  type: Types.ObjectId;
 
   @Prop({
     type: Array,
@@ -77,12 +71,8 @@ export class Job extends EntityDocumentHelper {
   })
   failedReason: string;
 
-  @Prop({
-    type: String,
-    enum: Platform,
-    required: true,
-  })
-  platform: Platform;
+  @Prop({ type: { type: Types.ObjectId, ref: Product.name, require: true } })
+  product: Types.ObjectId;
 
   @Prop({
     type: Object,
