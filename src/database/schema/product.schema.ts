@@ -46,7 +46,7 @@ export class Product extends EntityDocumentHelper {
   finalPrice: number;
 
   @Prop()
-  couponPrice: number;
+  coupon: number;
 
   @Prop()
   reviewCount: string;
