@@ -15,14 +15,14 @@ export class JobService {
   async create(createJobDto: CreateJobDto) {
     const jobData = await this.databaseService.job.create(createJobDto);
     switch (createJobDto.type) {
-      case JobType.GET_PRODUCT:
+      case JobType.GET_PRODUCT: {
         const { categories } = createJobDto;
         const categoryDatas = await this.databaseService.category.find({
           _id: { $in: categories },
         });
         for (const category of categoryDatas) {
           await this.kafkaProducer.send({
-            topic: ToppingMapping[createJobDto.platform],
+            topic: ToppingMapping[createJobDto.platform].getProduct,
             message: JSON.stringify({
               jobId: jobData.id,
               url: category.url,
@@ -32,6 +32,18 @@ export class JobService {
           });
         }
         break;
+      }
+      case JobType.GET_CATEGORY: {
+        await this.kafkaProducer.send({
+          topic: ToppingMapping[createJobDto.platform].getCategory,
+          message: JSON.stringify({
+            jobId: jobData.id,
+            url: 'https://www.oliveyoung.co.kr/store/main/main.do?oy=0',
+          }),
+          key: Date.now().toString(),
+        });
+        break;
+      }
       default:
         break;
     }

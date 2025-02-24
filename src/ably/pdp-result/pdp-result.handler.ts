@@ -36,7 +36,7 @@ export class PDPResultHandler extends BaseKafkaHandler {
   ): Promise<any> {
     const { parsedData, jobId } = data;
 
-    await this.updateSummary(jobId);
+    await this.updateJobSummary(jobId);
     await this.saveParsedProduct(parsedData);
     await this.updateJobStatus(jobId);
     logger.log('Successfully saved parsed product.');
@@ -50,7 +50,7 @@ export class PDPResultHandler extends BaseKafkaHandler {
     );
   }
 
-  async updateSummary(jobId: string) {
+  async updateJobSummary(jobId: string) {
     await this.kafkaProducer.send({
       topic: KafkaTopics.updateJobSummary,
       message: JSON.stringify({

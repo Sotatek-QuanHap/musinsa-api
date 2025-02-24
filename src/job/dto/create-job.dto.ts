@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsEnum, IsNotEmpty } from 'class-validator';
+import { IsArray, IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
 import { JobType, Platform } from '../../database/schema/job.schema';
 
 export class CreateJobDto {
@@ -27,5 +27,6 @@ export class CreateJobDto {
     description: 'The categories of the job',
   })
   @IsArray()
+  @IsOptional()
   categories: string[];
 }

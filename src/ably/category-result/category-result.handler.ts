@@ -4,8 +4,14 @@ import { BaseKafkaHandler } from '../../utils/base.handler';
 import { SandyLogger } from '../../utils/sandy.logger';
 import { ConfigService } from '@nestjs/config';
 import { DatabaseService } from '../../database/database.service';
-import { CategoryResultConfigs, KafkaTopics, Platform } from '../constants';
+import {
+  CategoryResultConfigs,
+  KafkaTopics as AblyKafkaTopics,
+  Platform,
+} from '../constants';
 import { CategoryService } from '../../category/category.service';
+import KafkaProducerService from '../../kafka/kafka.producer';
+import { JobStatus } from '../../database/schema/job.schema';
 
 @Injectable()
 export class CategoryResultHandler extends BaseKafkaHandler {
@@ -13,6 +19,7 @@ export class CategoryResultHandler extends BaseKafkaHandler {
     configService: ConfigService,
     databaseService: DatabaseService,
     private readonly categoryService: CategoryService,
+    private readonly kafkaProducer: KafkaProducerService,
   ) {
     super(configService, databaseService, CategoryResultConfigs.name);
     this.params = arguments;
@@ -21,16 +28,41 @@ export class CategoryResultHandler extends BaseKafkaHandler {
     return Promise.resolve();
   }
 
-  async process(data: any, logger: SandyLogger): Promise<any> {
+  async process(
+    data: {
+      parsedCategory: any;
+      jobId: string;
+    },
+    logger: SandyLogger,
+  ): Promise<any> {
+    const { jobId, parsedCategory } = data;
+
     await this.categoryService.saveCategories({
-      categories: data.parsedCategory,
+      categories: parsedCategory,
       platform: Platform,
+      jobId,
     });
+
+    await this.updateJobStatus(jobId);
     logger.log('Successfully processed parser request.');
   }
 
+  async updateJobStatus(jobId: string) {
+    await this.databaseService.job.updateOne(
+      {
+        _id: jobId,
+        $expr: { $eq: ['$summary.completed', '$summary.total'] },
+      },
+      {
+        $set: {
+          status: JobStatus.COMPLETED,
+        },
+      },
+    );
+  }
+
   getTopicNames(): string {
-    return KafkaTopics.categoryResult;
+    return AblyKafkaTopics.categoryResult;
   }
 
   getCount(): number {

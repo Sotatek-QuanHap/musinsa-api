@@ -10,6 +10,7 @@ import {
   OLIVE_YOUNG_PLATFORM,
 } from '../constants';
 import { CategoryService } from '../../category/category.service';
+import { JobStatus } from '../../database/schema/job.schema';
 
 @Injectable()
 export class CategoryResultHandler extends BaseKafkaHandler {
@@ -25,12 +26,35 @@ export class CategoryResultHandler extends BaseKafkaHandler {
     return Promise.resolve();
   }
 
-  async process(data: any, logger: SandyLogger): Promise<any> {
+  async process(
+    data: {
+      parsedCategory: any;
+      jobId: string;
+    },
+    logger: SandyLogger,
+  ): Promise<any> {
+    const { jobId, parsedCategory } = data;
     await this.categoryService.saveCategories({
-      categories: data.parsedCategory,
+      categories: parsedCategory,
       platform: OLIVE_YOUNG_PLATFORM,
+      jobId,
     });
+    await this.updateJobStatus(jobId);
     logger.log('Successfully processed parser request.');
+  }
+
+  async updateJobStatus(jobId: string) {
+    await this.databaseService.job.updateOne(
+      {
+        _id: jobId,
+        $expr: { $eq: ['$summary.completed', '$summary.total'] },
+      },
+      {
+        $set: {
+          status: JobStatus.COMPLETED,
+        },
+      },
+    );
   }
 
   getTopicNames(): string {
