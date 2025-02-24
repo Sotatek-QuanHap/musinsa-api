@@ -8,6 +8,7 @@ import {
   Index,
   ManyToOne,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 import { Product } from './product.entity';
 
@@ -32,6 +33,9 @@ export class Category {
   @Column({ type: 'varchar', length: 255, nullable: true })
   parentCategoryId?: string;
 
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  parentPlatform?: string;
+
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
@@ -43,7 +47,12 @@ export class Category {
 
   @ManyToOne(() => Category, (category) => category.subcategories, {
     nullable: true,
+    onDelete: 'SET NULL',
   })
+  @JoinColumn([
+    { name: 'parentCategoryId', referencedColumnName: 'id' },
+    { name: 'parentPlatform', referencedColumnName: 'platform' },
+  ])
   parentCategory?: Category;
 
   @OneToMany(() => Category, (category) => category.parentCategory)

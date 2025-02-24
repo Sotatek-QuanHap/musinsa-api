@@ -36,6 +36,9 @@ export class ProductHistory {
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   coupon?: number;
 
+  @Column({ type: 'int', nullable: true })
+  reviewCount?: number;
+
   @CreateDateColumn({ type: 'timestamp' })
   recordedAt: Date;
 
