@@ -11,6 +11,7 @@ import {
 } from './constants';
 import { DatabaseService } from 'src/database/database.service';
 import { ParserConfigSchemaDocument } from 'src/database/schema/parser-config.schema';
+import { OLIVE_YOUNG_PLATFORM } from '../constants';
 
 @Injectable()
 export class ConfigSynchronizerHandler extends BaseKafkaHandler {
@@ -28,7 +29,9 @@ export class ConfigSynchronizerHandler extends BaseKafkaHandler {
   }
 
   getParserConfigs(): Promise<ParserConfigSchemaDocument[]> {
-    return this.databaseService.parserConfig.find();
+    return this.databaseService.parserConfig.find({
+      platform: OLIVE_YOUNG_PLATFORM,
+    });
   }
 
   public async process(
