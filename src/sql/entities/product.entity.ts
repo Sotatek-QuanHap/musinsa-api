@@ -23,6 +23,9 @@ export class Product {
   platform: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
+  sku: string;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
   productName?: string;
 
   @Column({ type: 'varchar', length: 1024, nullable: true })
@@ -64,8 +67,16 @@ export class Product {
   @Column({ type: 'json', nullable: true })
   extraInfo?: Record<string, any>;
 
-  @Column({ type: 'json', nullable: true })
-  options?: Record<string, any>;
+  @Column({ type: 'json', nullable: true, array: true })
+  extraImages?: string[];
+
+  @Column({
+    type: 'jsonb',
+    array: false,
+    nullable: false,
+    default: () => "'[]'",
+  })
+  options?: Array<{ option: string; image: string }>;
 
   @Column({ type: 'varchar', length: 1024, nullable: true })
   image?: string;

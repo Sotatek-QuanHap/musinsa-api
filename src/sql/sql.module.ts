@@ -12,6 +12,7 @@ import { config } from './sql.config';
           const dataSource = new DataSource(config as DataSourceOptions);
           await dataSource.initialize();
           console.log('SQL database connected successfully.');
+          return dataSource;
         } catch (error) {
           console.log('Error connecting to sql database.');
           throw error;

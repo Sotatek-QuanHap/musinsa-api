@@ -14,8 +14,8 @@ export const config = {
   password: process.env.SQL_DATABASE_PASSWORD,
   username: process.env.SQL_DATABASE_USERNAME,
   database: process.env.SQL_DATABASE_NAME,
-  entities: [`${__dirname}/entities/*.entity.ts`],
-  migrations: [`${__dirname}/migrations/*.ts`],
+  entities: [`${__dirname}/entities/*.entity.{ts,js}`],
+  migrations: [`${__dirname}/migrations/*.{ts,js}`],
   autoLoadEntities: true,
   synchronize: process.env.SQL_DATABASE_SYNCHRONIZE || false,
 };
