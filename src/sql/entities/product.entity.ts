@@ -9,15 +9,16 @@ import {
   ManyToOne,
   OneToMany,
   JoinColumn,
+  BaseEntity,
 } from 'typeorm';
 import { Category } from './category.entity';
 import { ProductHistory } from './product_history.entity';
 
-type MappedStatus = 'All' | 'UnMapped' | 'Mapped';
+type MappedStatus = 'UnMapped' | 'Mapped';
 
 @Entity({ name: 'products' })
 @Index('idx_category', ['categoryId'])
-export class Product {
+export class Product extends BaseEntity {
   @PrimaryColumn({ type: 'varchar', length: 255 })
   productId: string;
 
@@ -59,7 +60,7 @@ export class Product {
 
   @Column({
     type: 'enum',
-    enum: ['All', 'Mapped', 'UnMapped'],
+    enum: ['Mapped', 'UnMapped'],
     default: 'UnMapped',
   })
   mappedStatus: MappedStatus;
@@ -103,6 +104,14 @@ export class Product {
 
   @Column({ type: 'text', nullable: true })
   raw?: string;
+
+  @Column({
+    type: 'jsonb',
+    array: false,
+    nullable: false,
+    default: () => "'[]'",
+  })
+  extraCategory?: Array<{ id: string; level: number; title: string }>;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

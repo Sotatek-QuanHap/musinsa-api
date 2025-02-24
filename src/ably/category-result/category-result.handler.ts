@@ -7,7 +7,7 @@ import { DatabaseService } from '../../database/database.service';
 import {
   CategoryResultConfigs,
   KafkaTopics as AblyKafkaTopics,
-  Platform,
+  ABLY_PLATFORM,
 } from '../constants';
 import { CategoryService } from '../../category/category.service';
 import { JobStatus } from '../../database/schema/job.schema';
@@ -37,7 +37,7 @@ export class CategoryResultHandler extends BaseKafkaHandler {
 
     await this.categoryService.saveCategories({
       categories: parsedCategory,
-      platform: Platform,
+      platform: ABLY_PLATFORM,
       jobId,
     });
 
