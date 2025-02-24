@@ -13,6 +13,8 @@ import {
 import { Category } from './category.entity';
 import { ProductHistory } from './product_history.entity';
 
+type MappedStatus = 'All' | 'UnMapped' | 'Mapped';
+
 @Entity({ name: 'products' })
 @Index('idx_category', ['categoryId'])
 export class Product {
@@ -52,7 +54,17 @@ export class Product {
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   finalPrice?: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({ type: 'int', nullable: true })
+  saleRate?: number;
+
+  @Column({
+    type: 'enum',
+    enum: ['All', 'Mapped', 'UnMapped'],
+    default: 'UnMapped',
+  })
+  mappedStatus: MappedStatus;
+
+  @Column({ type: 'int', nullable: true })
   coupon?: number;
 
   @Column({ type: 'int', nullable: true })

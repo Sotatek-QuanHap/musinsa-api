@@ -39,6 +39,9 @@ export class ProductHistory {
   @Column({ type: 'int', nullable: true })
   reviewCount?: number;
 
+  @Column({ type: 'int', nullable: true })
+  saleRate?: number;
+
   @CreateDateColumn({ type: 'timestamp' })
   recordedAt: Date;
 
