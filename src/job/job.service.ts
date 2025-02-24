@@ -2,12 +2,12 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
 import { DatabaseService } from '../database/database.service';
-import { JobType } from '../database/schema/job.schema';
 import KafkaProducerService from '../kafka/kafka.producer';
 import { ToppingMapping } from './constants';
 import { QueryJobDto } from './dto/query-job.dto';
 import { OrderMap } from '../utils/dto/base-query.dto';
 import { buildMetaData } from '../utils/infinity-pagination';
+import { JobType } from '../config/constants';
 
 @Injectable()
 export class JobService {
@@ -37,11 +37,20 @@ export class JobService {
         break;
       }
       case JobType.GET_CATEGORY: {
+        const { platform } = createJobDto;
+        const platformData = await this.databaseService.platform
+          .findOne({
+            key: platform,
+          })
+          .lean();
+
+        if (!platformData?.categoryUrl) break;
+
         await this.kafkaProducer.send({
           topic: ToppingMapping[createJobDto.platform].getCategory,
           message: JSON.stringify({
             jobId: jobData.id,
-            url: 'https://www.oliveyoung.co.kr/store/main/main.do?oy=0',
+            url: platformData.categoryUrl,
           }),
           key: Date.now().toString(),
         });
@@ -114,7 +123,6 @@ export class JobService {
   }
 
   async update(id: string, updateJobDto: UpdateJobDto) {
-    console.log('updateJobDto', updateJobDto);
     return await this.databaseService.job.updateOne(
       { _id: id },
       {
@@ -131,11 +139,11 @@ export class JobService {
     return `This action removes a #${id} job`;
   }
 
-  async getPlatform() {
+  getPlatform() {
     return this.databaseService.platform.find({}, { name: 1 }).lean();
   }
 
-  async getJobType() {
+  getJobType() {
     return this.databaseService.jobType.find({}, { name: 1 }).lean();
   }
 }
