@@ -67,8 +67,13 @@ export class Product {
   @Column({ type: 'json', nullable: true })
   extraInfo?: Record<string, any>;
 
-  @Column({ type: 'json', nullable: true, array: true })
-  extraImages?: string[];
+  @Column({
+    type: 'jsonb',
+    array: false,
+    nullable: false,
+    default: () => "'[]'",
+  })
+  extraImages?: Array<string>;
 
   @Column({
     type: 'jsonb',
