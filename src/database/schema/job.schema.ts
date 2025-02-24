@@ -104,6 +104,9 @@ export class Job extends EntityDocumentHelper {
 
   @Prop({ type: [{ type: Types.ObjectId, ref: Category.name }] })
   categories: Types.ObjectId[];
+
+  @Prop({ type: Date })
+  endDate: Date;
 }
 
 export const JobSchema = SchemaFactory.createForClass(Job);
