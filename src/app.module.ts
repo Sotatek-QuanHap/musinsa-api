@@ -18,6 +18,7 @@ import { OliveYoungModule } from './oliveyoung/module';
 import { ConfigSynchronizerModule } from './oliveyoung/config-synchronizer/config-synchronizer.module';
 import { AblyModule } from './ably/ably.module';
 import { SqlModule } from './sql/sql.module';
+import { SqlSynchronizationModule } from './sql-synchronization/sql-synchronization.module';
 
 const infrastructureDatabaseModule = MongooseModule.forRootAsync({
   useClass: MongooseConfigService,
@@ -43,6 +44,7 @@ const infrastructureDatabaseModule = MongooseModule.forRootAsync({
     AblyModule,
     ConfigSynchronizerModule,
     SqlModule,
+    SqlSynchronizationModule,
   ],
 })
 export class AppModule {}
