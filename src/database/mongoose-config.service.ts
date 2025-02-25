@@ -14,8 +14,8 @@ export class MongooseConfigService implements MongooseOptionsFactory {
     return {
       uri: this.configService.get('database.url', { infer: true }),
       dbName: this.configService.get('database.name', { infer: true }),
-      user: this.configService.get('database.username', { infer: true }),
-      pass: this.configService.get('database.password', { infer: true }),
+      // user: this.configService.get('database.username', { infer: true }),
+      // pass: this.configService.get('database.password', { infer: true }),
       connectionFactory(connection) {
         connection.plugin(mongooseAutoPopulate);
         return connection;

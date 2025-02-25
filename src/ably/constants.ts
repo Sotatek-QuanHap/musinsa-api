@@ -10,6 +10,7 @@ export const KafkaTopics = {
 
   plpCrawlerRequest: 'ably.plp-crawler.request',
   plpParserRequest: 'ably.plp-parser.request',
+  plpResult: 'ably.plp.result',
 
   pdpCrawlerRequest: 'ably.pdp-crawler.request',
   pdpParserRequest: 'ably.pdp-parser.request',
@@ -26,5 +27,4 @@ export const PdpResultConfigs = {
   groupId: 'ably-pdp-result-group',
 };
 
-export const ABLY_PLATFORM = 'ably';
-
+export const Platform = 'ably';
