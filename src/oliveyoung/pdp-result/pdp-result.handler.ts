@@ -37,7 +37,7 @@ export class PDPResultHandler extends BaseKafkaHandler {
 
     await this.updateJobSummary(jobId);
     await this.saveParsedProduct(parsedData);
-    await this.updateJobStatus(jobId);
+    await this.updateJob(jobId);
     logger.log('Successfully processed parser request.');
   }
 
@@ -55,7 +55,7 @@ export class PDPResultHandler extends BaseKafkaHandler {
     );
   }
 
-  async updateJobStatus(jobId: string) {
+  async updateJob(jobId: string) {
     await this.databaseService.job.updateOne(
       {
         _id: jobId,
@@ -67,6 +67,7 @@ export class PDPResultHandler extends BaseKafkaHandler {
       {
         $set: {
           status: JobStatus.COMPLETED,
+          endDate: new Date(),
         },
       },
     );

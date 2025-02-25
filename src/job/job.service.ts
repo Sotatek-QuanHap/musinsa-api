@@ -8,20 +8,27 @@ import { QueryJobDto } from './dto/query-job.dto';
 import { OrderMap } from '../utils/dto/base-query.dto';
 import { buildMetaData } from '../utils/infinity-pagination';
 import { JobType } from '../config/constants';
+import { InjectModel } from '@nestjs/mongoose';
+import { Job, JobDocument } from '../database/schema/job.schema';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class JobService {
   constructor(
     private readonly databaseService: DatabaseService,
     private readonly kafkaProducer: KafkaProducerService,
+    @InjectModel(Job.name) private readonly jobModel: Model<JobDocument>,
   ) {}
   async create(createJobDto: CreateJobDto) {
-    const jobData = await this.databaseService.job.create(createJobDto);
+    const createJob = new this.jobModel(createJobDto);
+
+    const jobData = await createJob.save();
+
     switch (createJobDto.type) {
       case JobType.GET_PRODUCT: {
         const { categories } = createJobDto;
         const categoryDatas = await this.databaseService.category.find({
-          _id: { $in: categories },
+          id: { $in: categories },
         });
         for (const category of categoryDatas) {
           await this.kafkaProducer.send({
@@ -92,13 +99,13 @@ export class JobService {
   }
 
   async findOne(id: string) {
-    const job = await this.databaseService.job.findOne({ _id: id }).lean();
+    const job = await this.jobModel.findOne({ _id: id }).lean().exec();
     if (!job) {
       throw new BadRequestException('NOT_FOUND');
     }
-    if (job.category?.length) {
+    if (job.categories?.length) {
       const categories: any[] = await this.databaseService.category.aggregate([
-        { $match: { _id: { $in: job.category } } },
+        { $match: { _id: { $in: job.categories } } },
         {
           $graphLookup: {
             from: 'categories',
@@ -117,7 +124,7 @@ export class JobService {
           },
         },
       ]);
-      job.category = categories;
+      job.categories = categories;
     }
     return job;
   }

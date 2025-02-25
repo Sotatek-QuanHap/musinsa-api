@@ -10,7 +10,6 @@ import {
   Platform,
 } from '../constants';
 import { CategoryService } from '../../category/category.service';
-import KafkaProducerService from '../../kafka/kafka.producer';
 import { JobStatus } from '../../database/schema/job.schema';
 
 @Injectable()
@@ -19,7 +18,6 @@ export class CategoryResultHandler extends BaseKafkaHandler {
     configService: ConfigService,
     databaseService: DatabaseService,
     private readonly categoryService: CategoryService,
-    private readonly kafkaProducer: KafkaProducerService,
   ) {
     super(configService, databaseService, CategoryResultConfigs.name);
     this.params = arguments;
@@ -43,11 +41,11 @@ export class CategoryResultHandler extends BaseKafkaHandler {
       jobId,
     });
 
-    await this.updateJobStatus(jobId);
+    await this.updateJob(jobId);
     logger.log('Successfully processed parser request.');
   }
 
-  async updateJobStatus(jobId: string) {
+  async updateJob(jobId: string) {
     await this.databaseService.job.updateOne(
       {
         _id: jobId,
@@ -59,6 +57,7 @@ export class CategoryResultHandler extends BaseKafkaHandler {
       {
         $set: {
           status: JobStatus.COMPLETED,
+          endDate: new Date(),
         },
       },
     );

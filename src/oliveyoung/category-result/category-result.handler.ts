@@ -39,11 +39,11 @@ export class CategoryResultHandler extends BaseKafkaHandler {
       platform: OLIVE_YOUNG_PLATFORM,
       jobId,
     });
-    await this.updateJobStatus(jobId);
+    await this.updateJob(jobId);
     logger.log('Successfully processed parser request.');
   }
 
-  async updateJobStatus(jobId: string) {
+  async updateJob(jobId: string) {
     await this.databaseService.job.updateOne(
       {
         _id: jobId,
@@ -55,6 +55,7 @@ export class CategoryResultHandler extends BaseKafkaHandler {
       {
         $set: {
           status: JobStatus.COMPLETED,
+          endDate: new Date(),
         },
       },
     );
