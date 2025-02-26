@@ -2,9 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { EntityDocumentHelper } from '../../utils/document-entity-helper';
 import { HydratedDocument, Schema as MongooseSchema, Types } from 'mongoose';
 import { IsEnum } from 'class-validator';
-import { Category } from './category.schema';
 import { Product } from './product.schema';
-import { JobType } from './job-type.schema';
 
 export enum JobStatus {
   PROCESSING = 'PROCESSING',
@@ -17,6 +15,12 @@ export enum Platform {
   OLIVE_YOUNG = 'olive-young',
   ABLY = 'ably',
 }
+
+export enum JobType {
+  GET_PRODUCT = 'GET_PRODUCT',
+  GET_CATEGORY = 'GET_CATEGORY',
+}
+
 export type JobDocument = HydratedDocument<Job>;
 
 @Schema({
@@ -58,13 +62,22 @@ export class Job extends EntityDocumentHelper {
   @IsEnum(JobStatus)
   status: JobStatus;
 
-  @Prop({ type: { type: Types.ObjectId, ref: JobType.name, require: true } })
-  type: Types.ObjectId;
+  @Prop({
+    type: String,
+    required: true,
+    enum: Platform,
+  })
+  @IsEnum(Platform)
+  platform: Platform;
+
+  @Prop({ type: String, required: true, enum: JobType })
+  @IsEnum(JobType)
+  type: JobType;
 
   @Prop({
     type: Array,
   })
-  category: Array<string>;
+  categories: Array<string>;
 
   @Prop({
     type: String,
@@ -91,9 +104,6 @@ export class Job extends EntityDocumentHelper {
     failed: number;
     completed: number;
   };
-
-  @Prop({ type: [{ type: Types.ObjectId, ref: Category.name }] })
-  categories: Types.ObjectId[];
 
   @Prop({ type: Date })
   endDate: Date;
