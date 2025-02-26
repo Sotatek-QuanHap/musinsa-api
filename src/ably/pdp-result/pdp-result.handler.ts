@@ -4,13 +4,12 @@ import { BaseKafkaHandler } from '../../utils/base.handler';
 import { SandyLogger } from '../../utils/sandy.logger';
 import { ConfigService } from '@nestjs/config';
 import { DatabaseService } from '../../database/database.service';
-import { ABLY_PLATFORM, PdpResultConfigs } from '../constants';
-import { isSameProduct } from 'src/utils/database.util';
 import {
-  Platform,
-  KafkaTopics as AblyKafkaTopics,
+  ABLY_PLATFORM,
   PdpResultConfigs,
+  KafkaTopics as AblyKafkaTopics,
 } from '../constants';
+import { isSameProduct } from 'src/utils/database.util';
 import KafkaProducerService from '../../kafka/kafka.producer';
 import { JobStatus } from '../../database/schema/job.schema';
 
@@ -84,8 +83,8 @@ export class PDPResultHandler extends BaseKafkaHandler {
 
   async saveParsedProduct(parsedData: any) {
     await this.databaseService.product.findOneAndUpdate(
-      { platform: Platform, productId: parsedData.productId },
-      { platform: Platform, ...parsedData },
+      { platform: ABLY_PLATFORM, productId: parsedData.productId },
+      { platform: ABLY_PLATFORM, ...parsedData },
       { new: true, upsert: true },
     );
   }

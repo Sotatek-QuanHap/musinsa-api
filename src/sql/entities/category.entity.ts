@@ -9,12 +9,13 @@ import {
   ManyToOne,
   OneToMany,
   JoinColumn,
+  BaseEntity,
 } from 'typeorm';
 import { Product } from './product.entity';
 
 @Entity({ name: 'categories' })
 @Index('idx_parent_category', ['parentCategoryId'])
-export class Category {
+export class Category extends BaseEntity {
   @PrimaryColumn({ type: 'varchar', length: 255 })
   id: string;
 

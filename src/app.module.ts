@@ -20,6 +20,8 @@ import { AblyModule } from './ably/ably.module';
 import { SqlModule } from './sql/sql.module';
 import { SqlSynchronizationModule } from './sql-synchronization/sql-synchronization.module';
 import { JobModule } from './job/job.module';
+import { CategoryModule } from './category/category.module';
+import { ProductModule } from './product/product.module';
 
 const infrastructureDatabaseModule = MongooseModule.forRootAsync({
   useClass: MongooseConfigService,
@@ -47,6 +49,8 @@ const infrastructureDatabaseModule = MongooseModule.forRootAsync({
     SqlModule,
     SqlSynchronizationModule,
     JobModule,
+    CategoryModule,
+    ProductModule,
   ],
 })
 export class AppModule {}
