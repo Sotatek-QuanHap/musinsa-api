@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { now, HydratedDocument } from 'mongoose';
+import mongoose, { HydratedDocument } from 'mongoose';
 import { EntityDocumentHelper } from '../../utils/document-entity-helper';
 
 export type ProductSchemaDocument = HydratedDocument<Product>;
@@ -61,6 +61,9 @@ export class Product extends EntityDocumentHelper {
   extraInfo: any;
 
   @Prop({ type: mongoose.Schema.Types.Mixed })
+  extraCategory: any;
+
+  @Prop({ type: mongoose.Schema.Types.Mixed })
   options: any;
 
   @Prop()
@@ -80,12 +83,6 @@ export class Product extends EntityDocumentHelper {
 
   @Prop({ type: mongoose.Schema.Types.Mixed })
   hiddenFields: any;
-
-  @Prop({ default: now })
-  createdAt: Date;
-
-  @Prop({ default: now })
-  updatedAt: Date;
 
   @Prop()
   deletedAt: Date;
