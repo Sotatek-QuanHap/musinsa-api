@@ -2,7 +2,7 @@
 import { Injectable } from '@nestjs/common';
 import { BaseKafkaHandler } from '../../utils/base.handler';
 import { ConfigService } from '@nestjs/config';
-import { KafkaTopics, Platform, PLPResultConfigs } from '../constants';
+import { KafkaTopics, ABLY_PLATFORM, PLPResultConfigs } from '../constants';
 import KafkaProducerService from '../../kafka/kafka.producer';
 import { DatabaseService } from '../../database/database.service';
 
@@ -27,12 +27,12 @@ export class PLPResultHandler extends BaseKafkaHandler {
     await this.databaseService.plpResult.updateOne(
       {
         categoryId,
-        platform: Platform,
+        platform: ABLY_PLATFORM,
       },
       {
         categoryId,
         metadata: productList,
-        platform: Platform,
+        platform: ABLY_PLATFORM,
       },
       { upsert: true },
     );

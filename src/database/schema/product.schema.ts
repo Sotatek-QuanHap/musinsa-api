@@ -81,6 +81,9 @@ export class Product extends EntityDocumentHelper {
   @Prop()
   raw?: string;
 
+  @Prop({ default: false })
+  _fullSynced: boolean;
+
   @Prop({ type: mongoose.Schema.Types.Mixed })
   hiddenFields: any;
 

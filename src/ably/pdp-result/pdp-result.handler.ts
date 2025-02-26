@@ -5,10 +5,11 @@ import { SandyLogger } from '../../utils/sandy.logger';
 import { ConfigService } from '@nestjs/config';
 import { DatabaseService } from '../../database/database.service';
 import {
-  Platform,
-  KafkaTopics as AblyKafkaTopics,
+  ABLY_PLATFORM,
   PdpResultConfigs,
+  KafkaTopics as AblyKafkaTopics,
 } from '../constants';
+import { isSameProduct } from 'src/utils/database.util';
 import KafkaProducerService from '../../kafka/kafka.producer';
 import { JobStatus } from '../../database/schema/job.schema';
 
@@ -36,15 +37,54 @@ export class PDPResultHandler extends BaseKafkaHandler {
     const { parsedData, jobId } = data;
 
     await this.updateJobSummary(jobId);
-    await this.saveParsedProduct(parsedData);
+    await this.handleProductChanges(parsedData, logger);
     await this.updateJob(jobId);
     logger.log('Successfully saved parsed product.');
   }
 
+  async handleProductChanges(data: any, logger: SandyLogger): Promise<any> {
+    // get old product to compare with new product
+    const oldProduct = await this.databaseService.product.findOne({
+      platform: ABLY_PLATFORM,
+      productId: data.productId,
+    });
+
+    // only care about some fields in the dbconfig document
+    const syncConfig = await this.databaseService.dbSyncConfig.findOne({
+      compareFields: true,
+    });
+
+    if (
+      syncConfig &&
+      isSameProduct(oldProduct, data, syncConfig.compareFields)
+    ) {
+      logger.log('Product is same as old product, skipping.');
+      return;
+    }
+
+    // save new product
+    await this.saveParsedProduct(data);
+
+    // once a day, insert the product history
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+    await this.databaseService.productHistory.updateOne(
+      { platform: ABLY_PLATFORM, productId: data.productId, recordedAt: today },
+      {
+        $set: {
+          ...data,
+          platform: ABLY_PLATFORM,
+          recordedAt: today,
+        },
+      },
+      { new: true, upsert: true },
+    );
+  }
+
   async saveParsedProduct(parsedData: any) {
     await this.databaseService.product.findOneAndUpdate(
-      { platform: Platform, productId: parsedData.productId },
-      { platform: Platform, ...parsedData },
+      { platform: ABLY_PLATFORM, productId: parsedData.productId },
+      { platform: ABLY_PLATFORM, ...parsedData },
       { new: true, upsert: true },
     );
   }

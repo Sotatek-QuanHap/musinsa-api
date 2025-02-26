@@ -8,6 +8,14 @@ import {
 } from './schema/parser-config.schema';
 import { Product, ProductSchema } from './schema/product.schema';
 import { PLPResult, PLPResultSchema } from './schema/plp-result.schema';
+import {
+  ProductHistory,
+  ProductHistorySchema,
+} from './schema/product-history.schema';
+import {
+  DbsyncConfig,
+  DbsyncConfigSchema,
+} from './schema/dbsync-config.schema';
 import { Job, JobSchema } from './schema/job.schema';
 import { Platform, PlatformSchema } from './schema/platform.schema';
 import { JobType, JobTypeSchema } from './schema/job-type.schema';
@@ -41,6 +49,20 @@ import { JobType, JobTypeSchema } from './schema/job-type.schema';
         name: Product.name,
         useFactory: () => {
           const schema = ProductSchema;
+          return schema;
+        },
+      },
+      {
+        name: ProductHistory.name,
+        useFactory: () => {
+          const schema = ProductHistorySchema;
+          return schema;
+        },
+      },
+      {
+        name: DbsyncConfig.name,
+        useFactory: () => {
+          const schema = DbsyncConfigSchema;
           return schema;
         },
       },

@@ -1,7 +1,7 @@
 export class ConvertUtil {
   static buildCategoryTree(categoryMap: Map<string, any>) {
     const tree: any[] = [];
-    categoryMap.forEach((category, _) => {
+    categoryMap.forEach((category) => {
       const parentCategoryId =
         category.parentCategoryId || category.parentCategory?.toString();
 

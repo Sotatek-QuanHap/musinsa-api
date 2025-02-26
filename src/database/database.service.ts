@@ -8,6 +8,14 @@ import {
   ParserConfigSchemaDocument,
 } from './schema/parser-config.schema';
 import { Product, ProductSchemaDocument } from './schema/product.schema';
+import {
+  ProductHistory,
+  ProductHistorySchemaDocument,
+} from './schema/product-history.schema';
+import {
+  DbsyncConfig,
+  DbsyncConfigSchemaDocument,
+} from './schema/dbsync-config.schema';
 import { Job, JobDocument } from './schema/job.schema';
 import { Platform, PlatformSchemaDocument } from './schema/platform.schema';
 import { JobType, JobTypeSchemaDocument } from './schema/job-type.schema';
@@ -20,6 +28,10 @@ export class DatabaseService {
     @InjectModel(ParserConfig.name)
     public parserConfig: Model<ParserConfigSchemaDocument>,
     @InjectModel(Product.name) public product: Model<ProductSchemaDocument>,
+    @InjectModel(ProductHistory.name)
+    public productHistory: Model<ProductHistorySchemaDocument>,
+    @InjectModel(DbsyncConfig.name)
+    public dbSyncConfig: Model<DbsyncConfigSchemaDocument>,
     @InjectModel(Job.name)
     public job: Model<JobDocument>,
     @InjectModel(Platform.name)
