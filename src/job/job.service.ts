@@ -11,6 +11,8 @@ import { JobType } from '../config/constants';
 import { InjectModel } from '@nestjs/mongoose';
 import { Job, JobDocument } from '../database/schema/job.schema';
 import { Model } from 'mongoose';
+import { ConvertUtil } from '../utils/convert.util';
+import { CategorySchemaDocument } from '../database/schema/category.schema';
 
 @Injectable()
 export class JobService {
@@ -104,27 +106,32 @@ export class JobService {
       throw new BadRequestException('NOT_FOUND');
     }
     if (job.categories?.length) {
-      const categories: any[] = await this.databaseService.category.aggregate([
-        { $match: { _id: { $in: job.categories } } },
-        {
-          $graphLookup: {
-            from: 'categories',
-            startWith: '$parentCategory',
-            connectFromField: 'parentCategory',
-            connectToField: '_id',
-            as: 'parentCategory',
-          },
-        },
-        {
-          $project: {
-            name: 1,
-            level: 1,
-            url: 1,
-            parentCategory: { _id: 1, name: 1, level: 1, url: 1 },
-          },
-        },
-      ]);
-      job.categories = categories;
+      const categories: CategorySchemaDocument[] =
+        await this.databaseService.category
+          .find(
+            { platform: job.platform, id: { $in: job.categories } },
+            { id: 1, name: 1, level: 1, parentCategory: 1 },
+          )
+          .populate({
+            path: 'parentCategories',
+            select: { id: 1, name: 1, level: 1, parentCategory: 1 },
+          })
+          .lean();
+      const categoryMap: Map<string, any> = new Map();
+      for (const cat of categories) {
+        const _id = cat._id.toString();
+        for (const parentCat of cat.parentCategories || []) {
+          const _parentCatId = parentCat._id.toString();
+          if (!categoryMap.has(_parentCatId)) {
+            categoryMap.set(_parentCatId, { ...parentCat, subcategories: [] });
+          }
+        }
+        delete cat.parentCategories;
+        if (!categoryMap.has(_id)) {
+          categoryMap.set(_id, { ...cat, subcategories: [] });
+        }
+      }
+      job.categories = ConvertUtil.buildCategoryTree(categoryMap);
     }
     return job;
   }
