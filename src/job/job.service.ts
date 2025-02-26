@@ -154,10 +154,10 @@ export class JobService {
   }
 
   getPlatform() {
-    return this.databaseService.platform.find({}, { name: 1 }).lean();
+    return this.databaseService.platform.find().lean();
   }
 
   getJobType() {
-    return this.databaseService.jobType.find({}, { name: 1 }).lean();
+    return this.databaseService.jobType.find().lean();
   }
 }
