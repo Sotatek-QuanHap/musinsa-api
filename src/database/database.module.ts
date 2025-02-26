@@ -16,6 +16,9 @@ import {
   DbsyncConfig,
   DbsyncConfigSchema,
 } from './schema/dbsync-config.schema';
+import { Job, JobSchema } from './schema/job.schema';
+import { Platform, PlatformSchema } from './schema/platform.schema';
+import { JobType, JobTypeSchema } from './schema/job-type.schema';
 
 @Global()
 @Module({
@@ -60,6 +63,27 @@ import {
         name: DbsyncConfig.name,
         useFactory: () => {
           const schema = DbsyncConfigSchema;
+          return schema;
+        },
+      },
+      {
+        name: Job.name,
+        useFactory: () => {
+          const schema = JobSchema;
+          return schema;
+        },
+      },
+      {
+        name: Platform.name,
+        useFactory: () => {
+          const schema = PlatformSchema;
+          return schema;
+        },
+      },
+      {
+        name: JobType.name,
+        useFactory: () => {
+          const schema = JobTypeSchema;
           return schema;
         },
       },

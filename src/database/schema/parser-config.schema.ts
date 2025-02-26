@@ -22,6 +22,9 @@ export class ParserConfig extends EntityDocumentHelper {
   })
   value: object;
 
+  @Prop()
+  platform: string;
+
   @Prop({ default: now })
   createdAt: Date;
 
@@ -34,3 +37,4 @@ export class ParserConfig extends EntityDocumentHelper {
 
 export const ParserConfigSchema = SchemaFactory.createForClass(ParserConfig);
 ParserConfigSchema.index({ key: 1 }, { unique: true });
+ParserConfigSchema.index({ platform: 1 }, { unique: true });

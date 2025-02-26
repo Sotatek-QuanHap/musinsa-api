@@ -16,6 +16,9 @@ import {
   DbsyncConfig,
   DbsyncConfigSchemaDocument,
 } from './schema/dbsync-config.schema';
+import { Job, JobDocument } from './schema/job.schema';
+import { Platform, PlatformSchemaDocument } from './schema/platform.schema';
+import { JobType, JobTypeSchemaDocument } from './schema/job-type.schema';
 
 @Injectable()
 export class DatabaseService {
@@ -29,5 +32,11 @@ export class DatabaseService {
     public productHistory: Model<ProductHistorySchemaDocument>,
     @InjectModel(DbsyncConfig.name)
     public dbSyncConfig: Model<DbsyncConfigSchemaDocument>,
+    @InjectModel(Job.name)
+    public job: Model<JobDocument>,
+    @InjectModel(Platform.name)
+    public platform: Model<PlatformSchemaDocument>,
+    @InjectModel(JobType.name)
+    public jobType: Model<JobTypeSchemaDocument>,
   ) {}
 }

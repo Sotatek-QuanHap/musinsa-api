@@ -6,10 +6,11 @@ import { ConfigService } from '@nestjs/config';
 import { DatabaseService } from '../../database/database.service';
 import {
   CategoryResultConfigs,
-  KafkaTopics,
-  ABLY_PLATFORM,
+  KafkaTopics as AblyKafkaTopics,
+  Platform,
 } from '../constants';
 import { CategoryService } from '../../category/category.service';
+import { JobStatus } from '../../database/schema/job.schema';
 
 @Injectable()
 export class CategoryResultHandler extends BaseKafkaHandler {
@@ -25,16 +26,45 @@ export class CategoryResultHandler extends BaseKafkaHandler {
     return Promise.resolve();
   }
 
-  async process(data: any, logger: SandyLogger): Promise<any> {
+  async process(
+    data: {
+      parsedCategory: any;
+      jobId: string;
+    },
+    logger: SandyLogger,
+  ): Promise<any> {
+    const { jobId, parsedCategory } = data;
+
     await this.categoryService.saveCategories({
-      categories: data.parsedCategory,
-      platform: ABLY_PLATFORM,
+      categories: parsedCategory,
+      platform: Platform,
+      jobId,
     });
+
+    await this.updateJob(jobId);
     logger.log('Successfully processed parser request.');
   }
 
+  async updateJob(jobId: string) {
+    await this.databaseService.job.updateOne(
+      {
+        _id: jobId,
+        $and: [
+          { $expr: { $eq: ['$summary.completed', '$summary.total'] } },
+          { 'summary.total': { $gt: 0 } },
+        ],
+      },
+      {
+        $set: {
+          status: JobStatus.COMPLETED,
+          endDate: new Date(),
+        },
+      },
+    );
+  }
+
   getTopicNames(): string {
-    return KafkaTopics.categoryResult;
+    return AblyKafkaTopics.categoryResult;
   }
 
   getCount(): number {

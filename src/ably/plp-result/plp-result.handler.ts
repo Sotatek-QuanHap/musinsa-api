@@ -20,8 +20,9 @@ export class PLPResultHandler extends BaseKafkaHandler {
   public async process(data: {
     categoryId: string;
     productList: any[];
+    jobId: string;
   }): Promise<any> {
-    const { categoryId, productList } = data;
+    const { categoryId, productList, jobId } = data;
 
     await this.databaseService.plpResult.updateOne(
       {
@@ -38,12 +39,20 @@ export class PLPResultHandler extends BaseKafkaHandler {
     for (const product of productList) {
       await this.kafkaProducer.send({
         topic: KafkaTopics.pdpCrawlerRequest,
-        message: JSON.stringify(product),
+        message: JSON.stringify({
+          product,
+          jobId,
+          categoryId,
+        }),
       });
     }
   }
 
   async setup(): Promise<void> {}
+
+  getTopicNames(): string {
+    return KafkaTopics.plpResult;
+  }
 
   public validator(): Promise<void> {
     return Promise.resolve();
