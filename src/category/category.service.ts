@@ -16,12 +16,14 @@ export class CategoryService {
     level = 1,
     platform,
     jobId,
+    parentCategories = [],
   }: {
     categories: any[];
     parentCategory?: string | null;
     level?: number;
     platform: string;
     jobId: string;
+    parentCategories?: string[];
   }) {
     for (const category of categories) {
       const id = category.id ?? category.name;
@@ -41,6 +43,7 @@ export class CategoryService {
             platform,
             level,
             parentCategory,
+            $addToSet: { parentCategories: { $each: parentCategories } },
           },
           { new: true, upsert: true },
         );
@@ -58,6 +61,7 @@ export class CategoryService {
           level: level + 1,
           platform,
           jobId,
+          parentCategories: [...parentCategories, savedCategory._id],
         });
       }
     }

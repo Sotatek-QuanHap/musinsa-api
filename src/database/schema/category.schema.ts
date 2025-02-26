@@ -43,6 +43,12 @@ export class Category extends EntityDocumentHelper {
   })
   parentCategory: CategorySchemaDocument;
 
+  @Prop({
+    type: [Types.ObjectId],
+    ref: Category.name,
+  })
+  parentCategories?: CategorySchemaDocument[];
+
   @Prop({ default: now })
   createdAt: Date;
 
