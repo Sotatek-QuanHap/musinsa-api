@@ -22,6 +22,8 @@ import { SqlSynchronizationModule } from './sql-synchronization/sql-synchronizat
 import { JobModule } from './job/job.module';
 import { CategoryModule } from './category/category.module';
 import { ProductModule } from './product/product.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 const infrastructureDatabaseModule = MongooseModule.forRootAsync({
   useClass: MongooseConfigService,
@@ -29,6 +31,9 @@ const infrastructureDatabaseModule = MongooseModule.forRootAsync({
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [databaseConfig, authConfig, appConfig, sqlConfig],
