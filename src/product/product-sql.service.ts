@@ -66,7 +66,11 @@ export class ProductSqlService {
     }
     if (query.sortBy && query.orderBy) {
       const orderBy: any = query.orderBy;
-      queryBuilder.orderBy(`product.${query.sortBy}`, orderBy);
+      queryBuilder.orderBy(
+        `"product"."${query.sortBy}"`,
+        orderBy,
+        'NULLS LAST',
+      );
     }
     const [products, count] = await Promise.all([
       queryBuilder.getMany(),
