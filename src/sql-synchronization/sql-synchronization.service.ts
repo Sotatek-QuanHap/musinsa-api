@@ -27,7 +27,7 @@ export class SqlSynchronizationService {
     const batchSize = 1000;
     let batch: any[] = [];
     const unsyncedCursor = this.databaseService.product
-      .find({ _fullSynced: false })
+      .find({ _fullSynced: false, categoryId: { $ne: null } })
       .cursor();
 
     for await (const product of unsyncedCursor) {

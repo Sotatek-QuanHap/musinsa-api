@@ -18,6 +18,11 @@ export class Platform extends EntityDocumentHelper {
   @Prop({
     type: String,
   })
+  name: string;
+
+  @Prop({
+    type: String,
+  })
   categoryUrl: string;
 }
 

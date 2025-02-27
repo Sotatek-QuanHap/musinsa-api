@@ -14,6 +14,11 @@ export type JobTypeSchemaDocument = HydratedDocument<JobType>;
 export class JobType extends EntityDocumentHelper {
   @Prop({ type: String, unique: true })
   key: string;
+
+  @Prop({
+    type: String,
+  })
+  name: string;
 }
 
 export const JobTypeSchema = SchemaFactory.createForClass(JobType);

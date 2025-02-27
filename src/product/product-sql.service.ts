@@ -72,6 +72,7 @@ export class ProductSqlService {
         'NULLS LAST',
       );
     }
+    queryBuilder.addOrderBy('product.createdAt', 'DESC');
     const [products, count] = await Promise.all([
       queryBuilder.getMany(),
       queryBuilder.getCount(),
