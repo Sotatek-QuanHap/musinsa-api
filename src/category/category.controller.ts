@@ -29,4 +29,9 @@ export class CategoryController {
   syncProduct() {
     return this.sqlSynchronizationService.syncProducts();
   }
+
+  @Post('sync-product-history')
+  syncProductHistory() {
+    return this.sqlSynchronizationService.syncProductHistories();
+  }
 }
