@@ -38,6 +38,11 @@ export class Category extends EntityDocumentHelper {
   platform: string;
 
   @Prop({
+    type: Boolean,
+  })
+  isLeaf: boolean;
+
+  @Prop({
     type: Types.ObjectId,
     ref: Category.name,
   })

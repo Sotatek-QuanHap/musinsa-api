@@ -29,10 +29,20 @@ export class JobService {
     switch (createJobDto.type) {
       case JobType.GET_PRODUCT: {
         const { categories } = createJobDto;
-        const categoryDatas = await this.databaseService.category.find({
-          id: { $in: categories },
+        const categoryDatas = await this.databaseService.category.find(
+          {
+            id: { $in: categories },
+          },
+          { id: 1 },
+        );
+        const categoriesId = categoryDatas.map((item) => item._id);
+        const categoriesLeaf = await this.databaseService.category.find({
+          $or: [
+            { parentCategories: { $in: categoriesId } },
+            { _id: { $in: categoriesId }, isLeaf: true },
+          ],
         });
-        for (const category of categoryDatas) {
+        for (const category of categoriesLeaf) {
           await this.kafkaProducer.send({
             topic: ToppingMapping[createJobDto.platform].getProduct,
             message: JSON.stringify({
