@@ -31,13 +31,14 @@ export class PDPResultHandler extends BaseKafkaHandler {
     data: {
       parsedData: any;
       jobId: string;
+      categoryId: string;
     },
     logger: SandyLogger,
   ): Promise<any> {
-    const { parsedData, jobId } = data;
+    const { parsedData, jobId, categoryId } = data;
 
     await this.updateJobSummary(jobId);
-    await this.handleProductChanges(parsedData, logger);
+    await this.handleProductChanges({ ...parsedData, categoryId }, logger);
     await this.updateJob(jobId);
     logger.log('Successfully saved parsed product.');
   }
@@ -77,7 +78,7 @@ export class PDPResultHandler extends BaseKafkaHandler {
           recordedAt: today,
         },
       },
-      { new: true, upsert: true },
+      { upsert: true },
     );
   }
 
@@ -85,7 +86,7 @@ export class PDPResultHandler extends BaseKafkaHandler {
     await this.databaseService.product.findOneAndUpdate(
       { platform: ABLY_PLATFORM, productId: parsedData.productId },
       { platform: ABLY_PLATFORM, ...parsedData },
-      { new: true, upsert: true },
+      { upsert: true },
     );
   }
 

@@ -43,6 +43,7 @@ export class CategoryService {
             platform,
             level,
             parentCategory,
+            isLeaf: !category.children?.length,
             $addToSet: { parentCategories: { $each: parentCategories } },
           },
           { new: true, upsert: true },

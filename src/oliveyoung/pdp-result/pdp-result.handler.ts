@@ -31,13 +31,14 @@ export class PDPResultHandler extends BaseKafkaHandler {
     data: {
       parsedData: any;
       jobId: string;
+      categoryId: string;
     },
     logger: SandyLogger,
   ): Promise<any> {
-    const { parsedData, jobId } = data;
+    const { parsedData, jobId, categoryId } = data;
 
     await this.updateJobSummary(jobId);
-    await this.handleProductChanges(parsedData, logger);
+    await this.handleProductChanges({ ...parsedData, categoryId }, logger);
     await this.updateJob(jobId);
     logger.log('Successfully processed parser request.');
   }
@@ -124,7 +125,7 @@ export class PDPResultHandler extends BaseKafkaHandler {
         ...parsedData,
         platform: OLIVE_YOUNG_PLATFORM,
       },
-      { new: true, upsert: true },
+      { upsert: true },
     );
   }
 
