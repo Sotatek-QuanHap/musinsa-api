@@ -105,7 +105,19 @@ export class PDPResultHandler extends BaseKafkaHandler {
       {
         _id: jobId,
         $and: [
-          { $expr: { $eq: ['$summary.completed', '$summary.total'] } },
+          {
+            $or: [
+              { $expr: { $eq: ['$summary.completed', '$summary.total'] } },
+              {
+                $expr: {
+                  $eq: [
+                    '$summary.total',
+                    { $add: ['$summary.completed', '$summary.fail'] },
+                  ],
+                },
+              },
+            ],
+          },
           { 'summary.total': { $gt: 0 } },
         ],
       },
@@ -113,6 +125,17 @@ export class PDPResultHandler extends BaseKafkaHandler {
         $set: {
           status: JobStatus.COMPLETED,
           endDate: new Date(),
+        },
+      },
+    );
+    await this.databaseService.job.updateOne(
+      {
+        _id: jobId,
+        'summary.processing': { $lt: 0 },
+      },
+      {
+        $set: {
+          'summary.processing': 0,
         },
       },
     );
