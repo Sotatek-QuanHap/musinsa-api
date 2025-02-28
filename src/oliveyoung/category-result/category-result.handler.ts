@@ -47,15 +47,22 @@ export class CategoryResultHandler extends BaseKafkaHandler {
     await this.databaseService.job.updateOne(
       {
         _id: jobId,
-        $and: [
-          { $expr: { $eq: ['$summary.completed', '$summary.total'] } },
-          { 'summary.total': { $gt: 0 } },
-        ],
       },
       {
         $set: {
           status: JobStatus.COMPLETED,
           endDate: new Date(),
+        },
+      },
+    );
+    await this.databaseService.job.updateOne(
+      {
+        _id: jobId,
+        'summary.processing': { $lt: 0 },
+      },
+      {
+        $set: {
+          'summary.processing': 0,
         },
       },
     );
