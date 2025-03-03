@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { QueryProductDto } from './dto/query-product';
 import { Brackets } from 'typeorm';
 import { Product } from '../sql/entities/product.entity';
 import { QueryUtil } from '../utils/query.util';
+import { ErrorCode } from '../utils/constants/error-code';
 
 @Injectable()
 export class ProductSqlService {
@@ -88,7 +89,12 @@ export class ProductSqlService {
     };
   }
 
-  findOne(productId: string, platform: string) {
-    return Product.findOne({ where: { productId, platform } });
+  async findOne(productId: string, platform: string) {
+    const product = await Product.findOne({ where: { productId, platform } });
+    if (!product) {
+      throw new BadRequestException(ErrorCode.NOT_FOUND);
+    }
+    if (product.image) product.extraImages?.unshift(product.image);
+    return product;
   }
 }
