@@ -1,0 +1,61 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  ## 🚀 Crawl Lambda Function
+  CrawlLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CrawlLambda
+      Runtime: nodejs18.x
+      Handler: dist/index.crawl
+      CodeUri: .
+      MemorySize: 128
+      Timeout: 10
+      Policies:
+        - AWSLambdaBasicExecutionRole
+      Events:
+        CrawlSQSEvent:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt CrawlQueue.Arn
+            BatchSize: 1
+
+  ## 🚀 Parse Lambda Function
+  ParseLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: ParseLambda
+      Runtime: nodejs18.x
+      Handler: dist/index.parse
+      CodeUri: .
+      MemorySize: 128
+      Timeout: 10
+      Policies:
+        - AWSLambdaBasicExecutionRole
+      Events:
+        ParseSQSEvent:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt ParseQueue.Arn
+            BatchSize: 1
+
+  ## 📌 Crawl SQS Queue
+  CrawlQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: CrawlQueue
+
+  ## 📌 Parse SQS Queue
+  ParseQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: ParseQueue
+
+Outputs:
+  CrawlQueue:
+    Value: !Ref CrawlQueue
+    Description: URL of CrawlQueue
+  ParseQueue:
+    Value: !Ref ParseQueue
+    Description: URL of ParseQueue
